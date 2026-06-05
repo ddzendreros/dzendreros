@@ -15,6 +15,9 @@ const BASE = process.env.BASE_PATH ?? "/ddzendreros/";
 export default defineConfig({
   site: SITE,
   base: BASE,
+  // El sitio se construye en /docs para poder publicarlo con
+  // "Deploy from a branch" → main /docs (o en la raíz de gh-pages, ver README).
+  outDir: "./docs",
   trailingSlash: "ignore",
   vite: {
     plugins: [tailwindcss()],

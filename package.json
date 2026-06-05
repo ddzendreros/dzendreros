@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "postbuild": "node -e \"require('fs').writeFileSync('docs/.nojekyll','')\"",
     "preview": "astro preview",
+    "deploy:root": "git subtree push --prefix docs origin gh-pages",
     "astro": "astro"
   },
   "dependencies": {

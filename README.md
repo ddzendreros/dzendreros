@@ -30,20 +30,44 @@ Las carpetas `Profecional/` y `Proyectos/` conservan el material fuente original
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
-npm run build    # genera dist/
-npm run preview  # sirve dist/ localmente
+npm run dev      # http://localhost:4321/ddzendreros/
+npm run build    # genera el sitio en docs/  (incluye .nojekyll)
+npm run preview  # sirve docs/ localmente
 ```
 
-## 🌐 Despliegue en GitHub Pages
+> El sitio se compila en **`docs/`** (configurado en `astro.config.mjs`) para poder
+> publicarlo con "Deploy from a branch". El archivo `.nojekyll` se genera automáticamente.
 
-1. Sube el repo a GitHub.
-2. En **Settings → Pages → Build and deployment**, elige **GitHub Actions**.
-3. El workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) construye y publica en cada push a `main`.
+## 🌐 Despliegue en GitHub Pages (sin Actions)
 
-> **Importante:** si publicas en `https://<usuario>.github.io/<repo>/` (no en el dominio raíz),
-> ajusta `base` en `astro.config.mjs` (o define `BASE_PATH=/<repo>/` y `SITE_URL` en el workflow).
-> Si usas el repo `<usuario>.github.io`, deja `base: "/"`.
+La URL final es **`https://ddzendreros.github.io/ddzendreros/`** en cualquiera de las dos opciones
+(el `base` ya está configurado a `/ddzendreros/`). Elige la que te convenga:
+
+### Opción A — carpeta `/docs` en `main` (la más simple) ✅
+
+1. `npm run build` y commitea la carpeta `docs/`:
+   ```bash
+   npm run build
+   git add docs && git commit -m "build" && git push
+   ```
+2. En **Settings → Pages → Build and deployment**:
+   - **Source:** Deploy from a branch
+   - **Branch:** `main`  ·  **Folder:** `/docs`
+3. Guarda. En ~1 min estará publicado.
+
+> Cada vez que cambies contenido: `npm run build` + commitea `docs/`.
+
+### Opción B — raíz `/` de una rama `gh-pages`
+
+Si prefieres servir desde la **raíz** de una rama dedicada (sin mezclar con el código):
+
+1. `npm run build`, commitea `docs/` y luego:
+   ```bash
+   npm run deploy:root      # publica docs/ en la raíz de la rama gh-pages
+   ```
+2. En **Settings → Pages**: Branch `gh-pages` · Folder `/ (root)`.
+
+> Cambiar de opción no requiere tocar el código: el `base` es el mismo en ambas.
 
 ## 🌿 Ramas de trabajo (por aspecto)
 
@@ -62,9 +86,9 @@ El repo usa una rama por aspecto para trabajo coordinado:
 
 ## 🔧 Antes de publicar
 
-- [ ] Reemplazar `links.github` y `links.linkedin` en [`src/data/content.ts`](src/data/content.ts) con tus URLs reales.
+- [ ] Reemplazar `links.linkedin` en [`src/data/content.ts`](src/data/content.ts) con tu URL real de LinkedIn.
 - [ ] Confirmar el email de contacto (`profile.email`).
-- [ ] Ajustar `site`/`base` en `astro.config.mjs` según tu URL de Pages.
+- [ ] Construir (`npm run build`) y commitear `docs/` antes de activar Pages.
 
 ---
 
