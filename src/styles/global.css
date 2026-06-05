@@ -2,9 +2,7 @@
 
 /* ════════════════════════════════════════════════════════════════════════
    DESIGN SYSTEM · Diego Canales — "Guardián / Centinela"
-   Base obsidiana + paleta que MUTA según la sección/aspecto en pantalla.
-   Cada sección declara data-palette; un IntersectionObserver propaga su
-   acento a :root para que la ambientación global (glow, nav) se transforme.
+   Base neumórfica obsidiana + paleta cromática dinámica.
    ════════════════════════════════════════════════════════════════════════ */
 
 @theme {
@@ -12,30 +10,36 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  --color-obsidian: #07080c;
-  --color-obsidian-2: #0c0e15;
-  --color-ink: #11141d;
+  --color-obsidian: #0f111a;
+  --color-obsidian-2: #121522;
+  --color-ink: #171a2b;
 }
 
 :root {
-  /* Lienzo base */
-  --bg: #07080c;
-  --bg-soft: #0c0e15;
-  --surface: rgba(255, 255, 255, 0.025);
-  --surface-2: rgba(255, 255, 255, 0.045);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
+  /* Lienzo base neumórfico */
+  --bg: #0f111a;
+  --bg-soft: #121522;
+  --surface: rgba(255, 255, 255, 0.015);
+  --surface-2: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.1);
   --text: #f4f1ea;
   --text-soft: #b9b6c6;
   --text-dim: #74738a;
 
-  /* Acento dinámico (lo sobreescribe cada sección vía JS) */
+  /* Sombras Neumórficas */
+  --nm-shadow-outset: 8px 8px 20px rgba(0, 0, 0, 0.45), -8px -8px 20px rgba(255, 255, 255, 0.035);
+  --nm-shadow-inset: inset 6px 6px 15px rgba(0, 0, 0, 0.5), inset -6px -6px 15px rgba(255, 255, 255, 0.025);
+  --nm-shadow-outset-sm: 4px 4px 10px rgba(0, 0, 0, 0.4), -4px -4px 10px rgba(255, 255, 255, 0.03);
+  --nm-shadow-inset-sm: inset 3px 3px 8px rgba(0, 0, 0, 0.45), inset -3px -3px 8px rgba(255, 255, 255, 0.02);
+
+  /* Acento dinámico */
   --accent: #d4a84b;
   --accent-2: #f2d48a;
-  --accent-ink: #1a1505;
-  --glow: 212, 168, 75; /* rgb del halo ambiental */
+  --accent-ink: #100d05;
+  --glow: 212, 168, 75;
 
-  /* Acento de PÁGINA: lo que el observer interpola globalmente */
+  /* Interpolación dinámica */
   --page-accent: var(--accent);
   --page-glow: var(--glow);
 
@@ -48,15 +52,14 @@
   *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
 }
 
-/* ── Paletas por aspecto ─────────────────────────────────────────────────
-   Cada subcarpeta/aspecto tiene identidad cromática propia.            */
-[data-palette="gold"]    { --accent: #d4a84b; --accent-2: #f2d48a; --accent-ink: #1a1505; --glow: 212,168,75; }
-[data-palette="argos"]   { --accent: #38bdf8; --accent-2: #7dd3fc; --accent-ink: #04161f; --glow: 56,189,248; }
-[data-palette="aeterna"] { --accent: #e6b23e; --accent-2: #ffd97a; --accent-ink: #1c1303; --glow: 230,178,62; }
-[data-palette="talent"]  { --accent: #2fcf6b; --accent-2: #a3e635; --accent-ink: #04190d; --glow: 47,207,107; }
-[data-palette="guardian"]{ --accent: #2dd4bf; --accent-2: #5eead4; --accent-ink: #032420; --glow: 45,212,191; }
-[data-palette="sice"]    { --accent: #a78bfa; --accent-2: #c4b5fd; --accent-ink: #150a2b; --glow: 167,139,250; }
-[data-palette="steel"]   { --accent: #6aa6ff; --accent-2: #9ec5ff; --accent-ink: #04101f; --glow: 106,166,255; }
+/* ── Paletas de Acento ────────────────────────────────────────────────── */
+[data-palette="gold"]    { --accent: #d4a84b; --accent-2: #f2d48a; --accent-ink: #100d05; --glow: 212,168,75; }
+[data-palette="argos"]   { --accent: #38bdf8; --accent-2: #7dd3fc; --accent-ink: #020f18; --glow: 56,189,248; }
+[data-palette="aeterna"] { --accent: #e6b23e; --accent-2: #ffd97a; --accent-ink: #150d03; --glow: 230,178,62; }
+[data-palette="talent"]  { --accent: #2fcf6b; --accent-2: #a3e635; --accent-ink: #021207; --glow: 47,207,107; }
+[data-palette="guardian"]{ --accent: #2dd4bf; --accent-2: #5eead4; --accent-ink: #011412; --glow: 45,212,191; }
+[data-palette="sice"]    { --accent: #a78bfa; --accent-2: #c4b5fd; --accent-ink: #0e051c; --glow: 167,139,250; }
+[data-palette="steel"]   { --accent: #6aa6ff; --accent-2: #9ec5ff; --accent-ink: #020a1c; --glow: 106,166,255; }
 
 /* ── Base ────────────────────────────────────────────────────────────── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -74,7 +77,7 @@ body {
   min-height: 100vh;
 }
 
-/* Ambientación global: halo que muta con la sección visible */
+/* Halos de luz de fondo con menor opacidad para no competir con el Neumorfismo */
 body::before {
   content: "";
   position: fixed;
@@ -83,19 +86,19 @@ body::before {
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(60% 55% at 78% 0%, rgba(var(--page-glow), 0.16), transparent 70%),
-    radial-gradient(48% 50% at 12% 8%, rgba(var(--page-glow), 0.10), transparent 72%);
-  transition: background 1.2s ease;
+    radial-gradient(60% 55% at 78% 0%, rgba(var(--page-glow), 0.1), transparent 70%),
+    radial-gradient(48% 50% at 12% 8%, rgba(var(--page-glow), 0.06), transparent 72%);
+  transition: background 1.5s ease;
 }
-/* Grano/textura tenue para profundidad */
+
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.5;
-  background-image: radial-gradient(rgba(255,255,255,0.018) 1px, transparent 1px);
+  opacity: 0.35;
+  background-image: radial-gradient(rgba(255,255,255,0.015) 1px, transparent 1px);
   background-size: 3px 3px;
 }
 
@@ -103,28 +106,32 @@ body::after {
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
   color: var(--text);
 }
 .font-mono { font-family: var(--font-mono); }
 .font-display { font-family: var(--font-display); }
 
-::selection { background: rgba(var(--page-glow), 0.32); color: #fff; }
+::selection { background: rgba(var(--page-glow), 0.25); color: #fff; }
 
 a { color: inherit; text-decoration: none; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(var(--page-glow), 0.35); border-radius: 99px; border: 2px solid var(--bg); }
-::-webkit-scrollbar-thumb:hover { background: rgba(var(--page-glow), 0.6); }
+/* Scrollbar neumórfico */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--bg-soft); box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3); }
+::-webkit-scrollbar-thumb { 
+  background: var(--bg); 
+  border-radius: 99px; 
+  border: 3px solid var(--bg-soft);
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--page-glow), 0.4); }
 
-/* ── Layout helpers ──────────────────────────────────────────────────── */
-.shell { width: min(1180px, 92vw); margin-inline: auto; }
-.section { padding-block: clamp(5rem, 4rem + 8vw, 9rem); position: relative; }
+/* ── Layout ──────────────────────────────────────────────────────────── */
+.shell { width: min(1200px, 92vw); margin-inline: auto; }
+.section { padding-block: clamp(4.5rem, 3.5rem + 7vw, 8rem); position: relative; }
 
-/* Encabezado de sección con kicker mono */
 .kicker {
   display: inline-flex; align-items: center; gap: 0.6rem;
   font-family: var(--font-mono);
@@ -136,79 +143,139 @@ a { color: inherit; text-decoration: none; }
   background: linear-gradient(90deg, var(--accent), transparent);
 }
 .section-title {
-  font-size: clamp(2.1rem, 1.5rem + 3vw, 3.4rem);
-  margin-top: 1.1rem; max-width: 18ch;
+  font-size: clamp(2rem, 1.4rem + 2.8vw, 3.2rem);
+  margin-top: 1rem; max-width: 20ch;
 }
 .section-lead {
-  margin-top: 1.1rem; max-width: 56ch; color: var(--text-soft);
-  font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.18rem);
+  margin-top: 1.1rem; max-width: 58ch; color: var(--text-soft);
+  font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.15rem);
 }
 
-/* ── Componentes ─────────────────────────────────────────────────────── */
+/* ── COMPONENTES NEUMÓRFICOS ─────────────────────────────────────────── */
+
+/* Tarjeta Extruida */
 .card {
   position: relative;
-  background: linear-gradient(180deg, var(--surface-2), var(--surface));
-  border: 1px solid var(--border);
-  border-radius: 1.1rem;
-  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+  background: var(--bg);
+  box-shadow: var(--nm-shadow-outset);
+  border: 1px solid rgba(255, 255, 255, 0.015);
+  border-radius: 1.4rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.4s ease;
   overflow: hidden;
 }
 .card:hover {
-  border-color: rgba(var(--glow), 0.45);
-  box-shadow: 0 24px 60px -32px rgba(var(--glow), 0.55);
   transform: translateY(-4px);
+  box-shadow: 12px 12px 24px rgba(0, 0, 0, 0.5), -12px -12px 24px rgba(255, 255, 255, 0.04), 0 0 25px rgba(var(--glow), 0.08);
+  border-color: rgba(var(--glow), 0.2);
 }
-.card::after {
-  content: ""; position: absolute; inset: 0; border-radius: inherit;
-  background: radial-gradient(120% 80% at 50% -10%, rgba(var(--glow), 0.10), transparent 60%);
-  opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
-}
-.card:hover::after { opacity: 1; }
 
+/* Contenedor Recesivo (Hundido) */
+.nm-recessed {
+  position: relative;
+  background: var(--bg-soft);
+  box-shadow: var(--nm-shadow-inset);
+  border-radius: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.01);
+  padding: 1.4rem;
+}
+
+/* Chip / Badge Inset */
 .chip {
   display: inline-flex; align-items: center; gap: 0.45rem;
-  font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.02em;
-  padding: 0.36rem 0.7rem; border-radius: 99px;
-  background: rgba(var(--glow), 0.08);
-  border: 1px solid rgba(var(--glow), 0.22);
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.02em;
+  padding: 0.32rem 0.8rem; border-radius: 99px;
+  background: var(--bg-soft);
+  box-shadow: var(--nm-shadow-inset-sm);
+  border: 1px solid rgba(255, 255, 255, 0.015);
   color: var(--accent-2);
   white-space: nowrap;
 }
 
+/* Botón Neumórfico */
 .btn {
   display: inline-flex; align-items: center; gap: 0.55rem;
-  font-weight: 500; font-size: 0.95rem;
-  padding: 0.85rem 1.4rem; border-radius: 0.7rem;
-  border: 1px solid var(--border-strong);
-  transition: all 0.3s ease; cursor: pointer;
+  font-weight: 500; font-size: 0.92rem;
+  padding: 0.8rem 1.4rem; border-radius: 0.8rem;
+  background: var(--bg);
+  border: 1px solid rgba(255, 255, 255, 0.01);
+  box-shadow: var(--nm-shadow-outset-sm);
+  color: var(--text-soft);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
 }
-.btn-primary {
-  background: linear-gradient(180deg, var(--accent-2), var(--accent));
-  color: var(--accent-ink); border-color: transparent; font-weight: 600;
-  box-shadow: 0 14px 34px -16px rgba(var(--glow), 0.8);
+.btn:hover {
+  color: var(--text);
+  transform: translateY(-1px);
+  box-shadow: 6px 6px 14px rgba(0, 0, 0, 0.5), -6px -6px 14px rgba(255, 255, 255, 0.04);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 44px -16px rgba(var(--glow), 0.95); }
-.btn-ghost:hover { background: rgba(var(--glow), 0.08); border-color: rgba(var(--glow), 0.4); color: var(--text); }
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: var(--nm-shadow-inset-sm);
+}
 
-.metric { font-family: var(--font-display); font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem); color: var(--accent-2); line-height: 1; }
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: var(--accent-ink);
+  font-weight: 600;
+  border-color: transparent;
+  box-shadow: 0 8px 16px rgba(var(--glow), 0.2), var(--nm-shadow-outset-sm);
+}
+.btn-primary:hover {
+  box-shadow: 0 10px 20px rgba(var(--glow), 0.3), var(--nm-shadow-outset-sm);
+}
+.btn-primary:active {
+  box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.4), var(--nm-shadow-inset-sm);
+}
+
+.btn-ghost {
+  border: 1px solid rgba(var(--glow), 0.15);
+  color: var(--accent-2);
+}
+.btn-ghost:hover {
+  background: rgba(var(--glow), 0.03);
+  border-color: rgba(var(--glow), 0.4);
+}
+
+/* Indicador métrico */
+.metric { 
+  font-family: var(--font-display); 
+  font-size: clamp(2rem, 1.4rem + 2vw, 2.8rem); 
+  color: var(--accent-2); 
+  line-height: 1; 
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
 
 .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border-strong), transparent); }
 
-/* Enlaces de texto con subrayado animado */
-.link-underline { position: relative; color: var(--accent-2); }
+/* Enlaces */
+.link-underline { position: relative; color: var(--accent-2); transition: color 0.2s ease; }
+.link-underline:hover { color: var(--text); }
 .link-underline::after {
   content: ""; position: absolute; left: 0; bottom: -2px; height: 1px; width: 100%;
-  background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease;
+  background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .link-underline:hover::after { transform: scaleX(1); }
 
-/* ── Reveal al hacer scroll ──────────────────────────────────────────── */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s ease; }
+/* ── ANIMACIONES Y EFECTOS ────────────────────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.is-in { opacity: 1; transform: none; }
-.reveal[data-delay="1"] { transition-delay: 0.08s; }
-.reveal[data-delay="2"] { transition-delay: 0.16s; }
-.reveal[data-delay="3"] { transition-delay: 0.24s; }
+.reveal[data-delay="1"] { transition-delay: 0.06s; }
+.reveal[data-delay="2"] { transition-delay: 0.12s; }
+.reveal[data-delay="3"] { transition-delay: 0.18s; }
 
-/* ── i18n: mostrar/ocultar según idioma activo ───────────────────────── */
+/* Micro-animación de respiración / pulso */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(var(--glow), 0.4)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(var(--glow), 0.8)); }
+}
+.pulse-indicator {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+/* i18n */
 html[data-lang="es"] :where([data-lang-en]) { display: none; }
 html[data-lang="en"] :where([data-lang-es]) { display: none; }

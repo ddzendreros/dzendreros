@@ -12,10 +12,13 @@ import T from "./T.astro";
     </div>
 
     <div class="exp-grid">
+      <!-- Línea de Tiempo de Experiencia -->
       <div class="exp-timeline">
         {experience.map((job, i) => (
           <article class="job reveal" data-delay={i}>
-            <div class="job-rail" aria-hidden="true"><span class="job-dot"></span></div>
+            <div class="job-rail" aria-hidden="true">
+              <span class="job-dot"></span>
+            </div>
             <div class="job-body">
               <div class="job-top">
                 <h3 class="job-role"><T es={job.role.es} en={job.role.en} /></h3>
@@ -32,12 +35,14 @@ import T from "./T.astro";
         ))}
       </div>
 
+      <!-- Barra Lateral: Educación & Habilidades -->
       <aside class="exp-side">
-        <div class="side-block reveal">
+        <!-- Educación -->
+        <div class="side-block card reveal">
           <span class="proj-label font-mono"><T es={ui.education_label.es} en={ui.education_label.en} /></span>
           <ul class="edu-list">
             {education.map((e) => (
-              <li>
+              <li class="edu-item">
                 <strong><T es={e.degree.es} en={e.degree.en} /></strong>
                 <span class="edu-school">{e.school}</span>
                 <span class="edu-period font-mono"><T es={e.period.es} en={e.period.en} /></span>
@@ -46,7 +51,8 @@ import T from "./T.astro";
           </ul>
         </div>
 
-        <div class="side-block reveal" data-delay="1">
+        <!-- Habilidades Técnicas -->
+        <div class="side-block card reveal" data-delay="1">
           <span class="proj-label font-mono"><T es={ui.skills_label.es} en={ui.skills_label.en} /></span>
           <div class="skills">
             {skills.map((g) => (
@@ -63,39 +69,79 @@ import T from "./T.astro";
 </section>
 
 <style>
-  .exp-head { margin-bottom: 3rem; }
+  .exp-head { margin-bottom: 3.2rem; }
   .exp-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
 
-  .exp-timeline { display: grid; gap: 2.2rem; }
-  .job { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; }
-  .job-rail { position: relative; width: 14px; display: flex; justify-content: center; }
-  .job-rail::before { content: ""; position: absolute; top: 6px; bottom: -2.2rem; width: 1px; background: var(--border-strong); }
+  /* Carril de línea de tiempo con relieve negativo */
+  .exp-timeline { display: grid; gap: 2.4rem; }
+  .job { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; }
+  
+  .job-rail { position: relative; width: 20px; display: flex; justify-content: center; }
+  .job-rail::before { 
+    content: ""; 
+    position: absolute; 
+    top: 6px; 
+    bottom: -2.6rem; 
+    width: 6px; 
+    background: var(--bg-soft); 
+    box-shadow: var(--nm-shadow-inset-sm); 
+    border-radius: 99px;
+  }
   .job:last-child .job-rail::before { display: none; }
-  .job-dot { width: 12px; height: 12px; border-radius: 99px; background: var(--accent); box-shadow: 0 0 0 5px rgba(var(--glow), 0.16); margin-top: 5px; }
+  
+  .job-dot { 
+    width: 14px; 
+    height: 14px; 
+    border-radius: 99px; 
+    background: var(--bg); 
+    box-shadow: var(--nm-shadow-outset-sm);
+    border: 1px solid rgba(255,255,255,0.015);
+    margin-top: 6px; 
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+  .job:hover .job-dot {
+    background: var(--accent);
+    box-shadow: 0 0 10px rgba(var(--glow), 0.6), var(--nm-shadow-outset-sm);
+  }
 
   .job-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; justify-content: space-between; }
-  .job-role { font-size: 1.3rem; }
-  .job-period { font-size: 0.76rem; color: var(--accent-2); }
-  .job-company { color: var(--text-soft); margin-top: 0.35rem; font-size: 0.95rem; }
+  .job-role { font-size: 1.25rem; font-weight: 500; }
+  .job-period { font-size: 0.74rem; color: var(--accent-2); }
+  .job-company { color: var(--text-soft); margin-top: 0.35rem; font-size: 0.94rem; }
   .job-loc { color: var(--text-dim); }
-  .job-bullets { list-style: none; display: grid; gap: 0.7rem; margin-top: 1rem; }
-  .job-bullets li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.96rem; }
+  .job-bullets { list-style: none; display: grid; gap: 0.75rem; margin-top: 1rem; }
+  .job-bullets li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.95rem; }
   .hl-mark { color: var(--accent); font-size: 0.7rem; line-height: 1.7; }
 
-  .exp-side { display: grid; gap: 2.4rem; align-content: start; }
-  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
-  .edu-list { list-style: none; display: grid; gap: 1.3rem; }
-  .edu-list li { display: grid; gap: 0.25rem; }
-  .edu-list strong { font-weight: 500; }
-  .edu-school { color: var(--text-soft); font-size: 0.9rem; }
-  .edu-period { color: var(--text-dim); font-size: 0.74rem; }
+  .exp-side { display: grid; gap: 2.2rem; align-content: start; }
+  .side-block {
+    padding: clamp(1.4rem, 1rem + 1.4vw, 2.2rem);
+  }
+  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.2rem; }
+  
+  .edu-list { list-style: none; display: grid; gap: 1.4rem; }
+  .edu-item { 
+    display: grid; 
+    gap: 0.25rem; 
+    padding-bottom: 1.2rem;
+    border-bottom: 1px dashed var(--border);
+  }
+  .edu-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .edu-list strong { font-weight: 500; font-size: 0.98rem; }
+  .edu-school { color: var(--text-soft); font-size: 0.88rem; }
+  .edu-period { color: var(--text-dim); font-size: 0.72rem; }
 
-  .skills { display: grid; gap: 1.3rem; }
+  .skills { display: grid; gap: 1.4rem; }
   .skill-group { display: grid; gap: 0.6rem; }
-  .skill-name { font-size: 0.74rem; color: var(--text-soft); letter-spacing: 0.04em; }
+  .skill-name { font-size: 0.72rem; color: var(--text-soft); letter-spacing: 0.04em; }
   .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 
   @media (min-width: 940px) {
-    .exp-grid { grid-template-columns: 1.4fr 0.9fr; gap: 4rem; }
+    .exp-grid { grid-template-columns: 1.35fr 0.95fr; gap: 4.5rem; }
   }
 </style>

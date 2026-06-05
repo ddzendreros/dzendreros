@@ -1,0 +1,429 @@
+---
+import T from "./T.astro";
+---
+
+<div class="terminal card">
+  <!-- Cabecera de la Ventana -->
+  <div class="terminal-header">
+    <div class="window-controls">
+      <span class="control close"></span>
+      <span class="control minimize"></span>
+      <span class="control maximize"></span>
+    </div>
+    <div class="terminal-title">diego@escom-terminal:~</div>
+    <div class="terminal-actions">
+      <button id="terminal-run-btn" class="run-btn" title="Ejecutar Script / Run Script">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        <span class="font-mono">RUN</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Pestañas de Archivos -->
+  <div class="terminal-tabs">
+    <button class="tab-item active" data-tab="argos">
+      <span class="tab-icon">🐍</span>
+      <span class="font-mono">argos.py</span>
+    </button>
+    <button class="tab-item" data-tab="aeterna">
+      <span class="tab-icon">🐍</span>
+      <span class="font-mono">aeterna.py</span>
+    </button>
+    <button class="tab-item" data-tab="skills">
+      <span class="tab-icon">🐚</span>
+      <span class="font-mono">skills.sh</span>
+    </button>
+  </div>
+
+  <!-- Pantalla de la Consola -->
+  <div class="terminal-body nm-recessed">
+    <!-- Tab: Argos -->
+    <div class="terminal-content active" id="content-argos">
+      <div class="terminal-line command">
+        <span class="prompt">$</span><span class="typed-command" data-cmd="python -m argos --query 'autonomous reasoning' --local"></span><span class="cursor">_</span>
+      </div>
+      <div class="terminal-logs" id="logs-argos"></div>
+    </div>
+
+    <!-- Tab: Aeterna -->
+    <div class="terminal-content" id="content-aeterna">
+      <div class="terminal-line command">
+        <span class="prompt">$</span><span class="typed-command" data-cmd="python -m aeterna --vigil --active-learning"></span><span class="cursor">_</span>
+      </div>
+      <div class="terminal-logs" id="logs-aeterna"></div>
+    </div>
+
+    <!-- Tab: Skills -->
+    <div class="terminal-content" id="content-skills">
+      <div class="terminal-line command">
+        <span class="prompt">$</span><span class="typed-command" data-cmd="./skills.sh --list --level=expert"></span><span class="cursor">_</span>
+      </div>
+      <div class="terminal-logs" id="logs-skills"></div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    // Definimos los logs para cada simulación
+    const argosLogs = [
+      { t: "⚡ [LANGGRAPH] Orquestando grafo de estados...", c: "info" },
+      { t: "🔍 [STATE: classifier] -> Intención detectada: Académica / Científica", c: "accent" },
+      { t: "🛠️ [STATE: decompose] -> Desglosando consulta en 3 subpreguntas para paralelismo...", c: "dim" },
+      { t: "🌐 [STATE: search] -> Consultando Semantic Scholar & arXiv...", c: "info" },
+      { t: "📚 [STATE: search] -> Encontrados 12 papers. Descargando abstracts...", c: "dim" },
+      { t: "🛡️ [STATE: validation] -> Evaluando fiabilidad. Requisitos: Metadata completa + Peer Reviewed.", c: "warning" },
+      { t: "✔️ [STATE: validation] -> 4 papers validados (Score > 0.85). 8 descartados.", c: "success" },
+      { t: "💬 [STATE: debate] -> Generando antítesis y contraste de hipótesis con IA local...", c: "accent" },
+      { t: "📝 [STATE: synthesis] -> Compilando reporte estructurado en Markdown con citas reales...", c: "info" },
+      { t: "🚀 [SUCCESS] Proceso completo local en 4.2s. Reporte guardado en /docs/argos_report.md", c: "success" }
+    ];
+
+    const aeternaLogs = [
+      { t: "👑 [CUSTODES] J.A.R.V.I.S. Core Activo (Inferencia Local Ollama en RTX 5060)", c: "accent" },
+      { t: "💾 [MEMORY] Conectando a Base de Datos de Tareas (SQLite)... 143 items cargados.", c: "info" },
+      { t: "🧬 [VECTOR] Inicializando ChromaDB... Memoria de contexto de largo plazo cargada.", c: "info" },
+      { t: "🏫 [ACADEMIC] Escaneando ESCOM-IPN horarios & entregas... 0 tareas pendientes hoy.", c: "success" },
+      { t: "🖥️ [MONITOR] CPU Temp: 42°C | GPU VRAM: 3.4/8GB | Uptime Operativo: 99.98%", c: "dim" },
+      { t: "⚠️ [ALERT] Inactividad detectada en proyecto 'Mi Web' (2 días sin commits).", c: "warning" },
+      { t: "📈 [ACTION] Escalando recordatorio a nivel de alerta 1...", c: "warning" },
+      { t: "✉️ [TELEGRAM] Notificación enviada a Diego: 'Custodian, tu vigilia te espera.'", c: "success" }
+    ];
+
+    const skillsLogs = [
+      { t: "⚙️  Listando stack tecnológico verificado de Diego Zendreros...", c: "accent" },
+      { t: "--------------------------------------------------------", c: "dim" },
+      { t: "💻 LENGUAJES:      Python, C / C++, Java, SQL, TypeScript", c: "info" },
+      { t: "🤖 IA & AGENTES:    LangGraph, LangChain, Ollama, watsonx, RAG, NLP, CV", c: "success" },
+      { t: "📊 DATOS & AUTO:   ChromaDB, SQLite, Pipelines de datos, Automatizaciones", c: "success" },
+      { t: "🐳 INFRA & DEVOPS: Docker, GitHub Actions, Redes, VPN, Servidores Linux", c: "warning" },
+      { t: "🔧 HERRAMIENTAS:   Git, Telegram API, Microsoft Graph, Astro 5", c: "info" },
+      { t: "--------------------------------------------------------", c: "dim" },
+      { t: "🟢 Ready for deployment.", c: "success" }
+    ];
+
+    const logData = {
+      argos: argosLogs,
+      aeterna: aeternaLogs,
+      skills: skillsLogs
+    };
+
+    let activeTab = "argos";
+    let isRunning = false;
+    let timeouts = [];
+
+    const runBtn = document.getElementById("terminal-run-btn");
+    const tabs = document.querySelectorAll(".tab-item");
+    const contents = document.querySelectorAll(".terminal-content");
+
+    // Limpia y resetea las animaciones en curso
+    function resetTerminal() {
+      timeouts.forEach(t => clearTimeout(t));
+      timeouts = [];
+      isRunning = false;
+      runBtn.classList.remove("disabled");
+
+      // Resetear textos typed-command y logs
+      document.querySelectorAll(".typed-command").forEach(el => {
+        el.textContent = "";
+      });
+      document.querySelectorAll(".terminal-logs").forEach(el => {
+        el.innerHTML = "";
+      });
+      document.querySelectorAll(".cursor").forEach(el => {
+        el.style.display = "inline";
+      });
+    }
+
+    // Animación de escritura
+    function typeCommand(element, text, callback) {
+      let index = 0;
+      element.textContent = "";
+      function type() {
+        if (index < text.length) {
+          element.textContent += text[index];
+          index++;
+          const t = setTimeout(type, 35 + Math.random() * 30);
+          timeouts.push(t);
+        } else {
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    // Simula la impresión progresiva de logs
+    function printLogs(logContainer, logs, cursorEl) {
+      cursorEl.style.display = "none"; // Ocultar cursor al iniciar logs
+      let logIndex = 0;
+
+      function printNextLine() {
+        if (logIndex < logs.length) {
+          const log = logs[logIndex];
+          const line = document.createElement("div");
+          line.className = `terminal-line log-line color-${log.c}`;
+          line.textContent = log.t;
+          logContainer.appendChild(line);
+
+          // Auto scroll
+          const body = logContainer.closest(".terminal-body");
+          body.scrollTop = body.scrollHeight;
+
+          logIndex++;
+          const t = setTimeout(printNextLine, 120 + Math.random() * 150);
+          timeouts.push(t);
+        } else {
+          isRunning = false;
+          runBtn.classList.remove("disabled");
+          // Añadir prompt final inactivo
+          const finalPrompt = document.createElement("div");
+          finalPrompt.className = "terminal-line command";
+          finalPrompt.innerHTML = '<span class="prompt">$</span><span class="cursor pulse-indicator">_</span>';
+          logContainer.appendChild(finalPrompt);
+
+          const body = logContainer.closest(".terminal-body");
+          body.scrollTop = body.scrollHeight;
+        }
+      }
+      const t = setTimeout(printNextLine, 300);
+      timeouts.push(t);
+    }
+
+    // Orquesta la ejecución del script de la pestaña activa
+    function runActiveScript() {
+      if (isRunning) return;
+      isRunning = true;
+      runBtn.classList.add("disabled");
+
+      const activeContent = document.querySelector(`.terminal-content.active`);
+      const typedEl = activeContent.querySelector(".typed-command");
+      const cursorEl = activeContent.querySelector(".cursor");
+      const logsEl = activeContent.querySelector(".terminal-logs");
+      const cmdText = typedEl.getAttribute("data-cmd");
+
+      // Resetear la pestaña actual antes de escribir
+      typedEl.textContent = "";
+      logsEl.innerHTML = "";
+      cursorEl.style.display = "inline";
+
+      typeCommand(typedEl, cmdText, () => {
+        printLogs(logsEl, logData[activeTab], cursorEl);
+      });
+    }
+
+    // Cambiar entre pestañas
+    tabs.forEach(tab => {
+      tab.addEventListener("click", function () {
+        if (isRunning) return; // Bloquear cambio si se está ejecutando
+
+        const targetTab = this.getAttribute("data-tab");
+        if (targetTab === activeTab) return;
+
+        // Quitar clases activas
+        tabs.forEach(t => t.classList.remove("active"));
+        contents.forEach(c => c.classList.remove("active"));
+
+        // Activar pestaña seleccionada
+        this.classList.add("active");
+        document.getElementById(`content-${targetTab}`).classList.add("active");
+
+        activeTab = targetTab;
+        resetTerminal();
+        // Auto-run al cambiar de pestaña para mejorar el feedback visual inicial
+        runActiveScript();
+      });
+    });
+
+    runBtn.addEventListener("click", function () {
+      if (isRunning) return;
+      resetTerminal();
+      runActiveScript();
+    });
+
+    // Iniciar el script Argos la primera vez que carga la pantalla
+    document.addEventListener("DOMContentLoaded", () => {
+      // Usar un IntersectionObserver para disparar el script cuando sea visible el Hero
+      const terminalEl = document.querySelector(".terminal");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            runActiveScript();
+            observer.unobserve(terminalEl);
+          }
+        });
+      }, { threshold: 0.2 });
+      observer.observe(terminalEl);
+    });
+  })();
+</script>
+
+<style>
+  .terminal {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 580px;
+    height: 380px;
+    background: var(--bg);
+    border-radius: 1.1rem;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .window-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .control {
+    width: 10px;
+    height: 10px;
+    border-radius: 99px;
+    display: inline-block;
+  }
+  .control.close { background: #ff5f56; }
+  .control.minimize { background: #ffbd2e; }
+  .control.maximize { background: #27c93f; }
+
+  .terminal-title {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.02em;
+    user-select: none;
+  }
+
+  .run-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    background: var(--bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--accent-2);
+    box-shadow: var(--nm-shadow-outset-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .run-btn:hover:not(.disabled) {
+    color: #27c93f;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.4), -2px -2px 6px rgba(255,255,255,0.02);
+    transform: translateY(-0.5px);
+  }
+  .run-btn:active:not(.disabled) {
+    box-shadow: var(--nm-shadow-inset-sm);
+    transform: translateY(0.5px);
+  }
+  .run-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .terminal-tabs {
+    display: flex;
+    background: var(--bg-soft);
+    border-bottom: 1px solid var(--border);
+    padding-inline: 0.5rem;
+    gap: 2px;
+  }
+
+  .tab-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.5rem 0.9rem;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.74rem;
+    cursor: pointer;
+    position: relative;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    transition: all 0.25s ease;
+  }
+  .tab-item:hover {
+    color: var(--text-soft);
+    background: rgba(255, 255, 255, 0.01);
+  }
+  .tab-item.active {
+    color: var(--accent-2);
+    background: var(--bg);
+    border-top: 1px solid rgba(var(--glow), 0.3);
+  }
+
+  .terminal-body {
+    flex: 1;
+    margin: 0.8rem;
+    padding: 0.9rem;
+    border-radius: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    background: #090a11 !important; /* Panel interno negro profundo */
+  }
+
+  .terminal-content {
+    display: none;
+  }
+  .terminal-content.active {
+    display: block;
+  }
+
+  .terminal-line {
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-bottom: 0.25rem;
+  }
+  .terminal-line.command {
+    color: var(--text);
+  }
+  .prompt {
+    color: var(--accent);
+    margin-right: 0.5rem;
+    font-weight: bold;
+    user-select: none;
+  }
+  .cursor {
+    font-weight: bold;
+    color: var(--accent-2);
+  }
+
+  /* Colores de Logs ANSI */
+  .color-info { color: #81a1c1; }
+  .color-accent { color: var(--accent-2); }
+  .color-success { color: #a3be8c; }
+  .color-warning { color: #ebcb8b; }
+  .color-dim { color: var(--text-dim); }
+
+  /* Ajuste responsivo */
+  @media (max-width: 480px) {
+    .terminal {
+      height: 340px;
+    }
+    .terminal-body {
+      font-size: 0.72rem;
+      margin: 0.5rem;
+      padding: 0.6rem;
+    }
+    .tab-item {
+      padding: 0.4rem 0.6rem;
+    }
+  }
+</style>

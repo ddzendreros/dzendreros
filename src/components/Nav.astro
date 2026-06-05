@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <header class="nav">
-  <div class="shell nav-inner">
+  <div class="nav-inner">
     <a class="brand" href="#home" aria-label={profile.shortName}>
       <span class="brand-mark">{profile.initials}</span>
       <span class="brand-name">{profile.shortName}</span>
@@ -14,7 +14,7 @@ const base = import.meta.env.BASE_URL;
 
     <nav class="nav-links" aria-label="Primary">
       {nav.map((item) => (
-        <a href={`#${item.id}`}><T es={item.label.es} en={item.label.en} /></a>
+        <a href={`#${item.id}`} class="nav-link font-mono"><T es={item.label.es} en={item.label.en} /></a>
       ))}
     </nav>
 
@@ -46,42 +46,98 @@ const base = import.meta.env.BASE_URL;
 
 <style>
   .nav {
-    position: fixed; inset: 0 0 auto 0; z-index: 50;
-    backdrop-filter: blur(14px);
-    background: linear-gradient(180deg, rgba(7,8,12,0.82), rgba(7,8,12,0.35));
-    border-bottom: 1px solid var(--border);
+    position: fixed; 
+    top: 1rem; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: min(1180px, 94vw);
+    z-index: 50;
+    backdrop-filter: blur(16px);
+    background: rgba(15, 17, 26, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.035);
+    border-radius: 1.25rem;
+    box-shadow: var(--nm-shadow-outset);
+    transition: border-color 0.8s ease;
   }
+  
   .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    height: 68px; gap: 1.5rem;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
+    height: 64px; 
+    padding-inline: 1.25rem;
+    gap: 1.5rem;
   }
+  
   .brand { display: inline-flex; align-items: center; gap: 0.6rem; font-weight: 600; }
+  
   .brand-mark {
-    display: grid; place-items: center; width: 34px; height: 34px;
-    border-radius: 9px; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;
+    display: grid; 
+    place-items: center; 
+    width: 32px; 
+    height: 32px;
+    border-radius: 8px; 
+    font-family: var(--font-mono); 
+    font-size: 0.8rem; 
+    font-weight: 600;
     color: var(--accent-ink);
     background: linear-gradient(180deg, var(--accent-2), var(--accent));
-    box-shadow: 0 8px 22px -12px rgba(var(--page-glow), 0.9);
-    transition: background 0.8s ease;
+    box-shadow: 0 4px 10px rgba(var(--page-glow), 0.35), var(--nm-shadow-outset-sm);
+    transition: background 1.5s ease;
   }
-  .brand-name { font-family: var(--font-display); letter-spacing: -0.01em; }
+  
+  .brand-name { 
+    font-family: var(--font-display); 
+    letter-spacing: -0.01em; 
+    font-size: 0.96rem;
+  }
 
-  .nav-links { display: none; gap: 1.6rem; font-size: 0.92rem; }
-  .nav-links a { color: var(--text-soft); transition: color 0.25s ease; position: relative; }
-  .nav-links a:hover { color: var(--text); }
+  .nav-links { display: none; gap: 0.6rem; font-size: 0.76rem; letter-spacing: 0.02em; }
+  
+  .nav-link { 
+    color: var(--text-soft); 
+    padding: 0.45rem 0.75rem; 
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .nav-link:hover { 
+    color: var(--text); 
+    background: rgba(255, 255, 255, 0.015);
+    border-color: rgba(255, 255, 255, 0.03);
+    box-shadow: var(--nm-shadow-outset-sm);
+  }
 
-  .nav-actions { display: flex; align-items: center; gap: 0.7rem; }
+  .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+  
   .lang-toggle {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 42px; height: 38px; border-radius: 9px;
-    background: var(--surface); border: 1px solid var(--border);
-    font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-soft);
-    cursor: pointer; transition: all 0.25s ease;
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center;
+    width: 44px; 
+    height: 36px; 
+    border-radius: 8px;
+    background: var(--bg); 
+    border: 1px solid rgba(255, 255, 255, 0.015);
+    box-shadow: var(--nm-shadow-outset-sm);
+    font-family: var(--font-mono); 
+    font-size: 0.75rem; 
+    color: var(--text-soft);
+    cursor: pointer; 
+    transition: all 0.2s ease;
   }
-  .lang-toggle:hover { color: var(--accent-2); border-color: rgba(var(--page-glow), 0.4); }
-  .nav-cta { display: none; padding: 0.55rem 1rem; font-size: 0.88rem; }
+  .lang-toggle:hover { 
+    color: var(--accent-2); 
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.4), -2px -2px 6px rgba(255,255,255,0.02);
+  }
+  .lang-toggle:active {
+    box-shadow: var(--nm-shadow-inset-sm);
+  }
+  
+  .nav-cta { display: none; padding: 0.45rem 1rem; font-size: 0.8rem; }
 
-  @media (min-width: 820px) {
+  @media (min-width: 860px) {
     .nav-links { display: flex; }
     .nav-cta { display: inline-flex; }
   }
