@@ -1,0 +1,14 @@
+---
+/* Renderiza ambas variantes de idioma; el CSS oculta la inactiva.
+   Uso: <T es="Hola" en="Hi" /> o <T es={..} en={..} as="h2" class="..." /> */
+interface Props {
+  es: string;
+  en: string;
+  as?: keyof HTMLElementTagNameMap;
+  class?: string;
+}
+const { es, en, as = "span", class: cls } = Astro.props;
+const Tag = as as any;
+---
+<Tag data-lang-es class={cls} set:html={es.replace(/\n/g, "<br>")} />
+<Tag data-lang-en class={cls} set:html={en.replace(/\n/g, "<br>")} />

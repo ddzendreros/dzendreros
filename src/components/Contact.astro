@@ -1,0 +1,45 @@
+---
+import { profile } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+const year = new Date().getFullYear();
+---
+
+<section id="contact" class="section" data-palette="gold">
+  <div class="shell contact-wrap">
+    <p class="kicker reveal"><T es={ui.contact_kicker.es} en={ui.contact_kicker.en} /></p>
+    <h2 class="contact-title reveal" data-delay="1"><T es={ui.contact_title.es} en={ui.contact_title.en} /></h2>
+    <p class="section-lead reveal" data-delay="2" style="margin-inline:auto;"><T es={ui.contact_lead.es} en={ui.contact_lead.en} /></p>
+
+    <a class="contact-mail font-display reveal" data-delay="2" href={`mailto:${profile.email}`}>{profile.email}</a>
+
+    <div class="contact-links reveal" data-delay="3">
+      <a class="btn btn-primary" href={`mailto:${profile.email}`}>
+        <T es={ui.email_label.es} en={ui.email_label.en} /> <span aria-hidden="true">→</span>
+      </a>
+      <a class="btn btn-ghost" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="shell footer-inner">
+      <span class="font-mono">© {year} {profile.name}</span>
+      <span class="font-mono footer-credit"><T es={ui.rights.es} en={ui.rights.en} /> · Astro</span>
+    </div>
+  </footer>
+</section>
+
+<style>
+  .contact-wrap { text-align: center; max-width: 70ch; margin-inline: auto; }
+  .contact-title { font-size: clamp(2.4rem, 1.6rem + 4vw, 4.4rem); margin-top: 1.1rem; }
+  .contact-mail {
+    display: inline-block; margin-top: 2.4rem; font-size: clamp(1.4rem, 1rem + 2.4vw, 2.6rem);
+    color: var(--accent-2); border-bottom: 1px solid transparent; transition: border-color 0.3s ease, color 0.3s ease;
+  }
+  .contact-mail:hover { border-color: var(--accent); }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; margin-top: 2.6rem; }
+
+  .footer { margin-top: clamp(4rem, 3rem + 6vw, 7rem); border-top: 1px solid var(--border); padding-top: 2rem; }
+  .footer-inner { display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; font-size: 0.76rem; color: var(--text-dim); }
+</style>

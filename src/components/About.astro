@@ -1,0 +1,54 @@
+---
+import { about } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+---
+
+<section id="about" class="section" data-palette="gold">
+  <div class="shell about-grid">
+    <div class="about-head">
+      <p class="kicker reveal"><T es={ui.about_kicker.es} en={ui.about_kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1">
+        <T es={ui.about_title.es} en={ui.about_title.en} />
+      </h2>
+    </div>
+
+    <div class="about-body">
+      {about.paragraphs.map((p, i) => (
+        <p class="about-p reveal" data-delay={i}>
+          <T es={p.es} en={p.en} />
+        </p>
+      ))}
+    </div>
+
+    <div class="about-facts">
+      {about.facts.map((f, i) => (
+        <div class="fact reveal" data-delay={i}>
+          <span class="metric">{f.value}</span>
+          <span class="fact-label font-mono"><T es={f.label.es} en={f.label.en} /></span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-grid { display: grid; grid-template-columns: 1fr; gap: 2.6rem; }
+  .about-body { display: grid; gap: 1.3rem; max-width: 64ch; }
+  .about-p { color: var(--text-soft); font-size: clamp(1.02rem, 0.98rem + 0.3vw, 1.18rem); }
+  .about-p :global(br) { display: block; content: ""; margin-top: 0.4rem; }
+
+  .about-facts {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem;
+    border-top: 1px solid var(--border); padding-top: 2rem;
+  }
+  .fact { display: flex; flex-direction: column; gap: 0.5rem; }
+  .fact-label { font-size: 0.74rem; color: var(--text-dim); letter-spacing: 0.02em; max-width: 24ch; }
+
+  @media (min-width: 900px) {
+    .about-grid { grid-template-columns: 0.9fr 1.1fr; grid-template-areas: "head body" "facts body"; align-items: start; column-gap: 4rem; }
+    .about-head { grid-area: head; }
+    .about-body { grid-area: body; }
+    .about-facts { grid-area: facts; grid-template-columns: repeat(2, 1fr); border-top: none; padding-top: 0; }
+  }
+</style>

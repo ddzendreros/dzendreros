@@ -1,0 +1,81 @@
+---
+import { projects } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+---
+
+<section id="projects" class="section" data-palette="gold">
+  <div class="shell">
+    <div class="proj-head">
+      <p class="kicker reveal"><T es={ui.projects_kicker.es} en={ui.projects_kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1"><T es={ui.projects_title.es} en={ui.projects_title.en} /></h2>
+      <p class="section-lead reveal" data-delay="2"><T es={ui.projects_lead.es} en={ui.projects_lead.en} /></p>
+    </div>
+
+    <div class="proj-list">
+      {projects.map((p, i) => (
+        <article class="proj card reveal" data-palette={p.palette} data-delay={(i % 2) + 1}>
+          <div class="proj-top">
+            <div>
+              <span class="proj-meta font-mono"><T es={p.meta.es} en={p.meta.en} /></span>
+              <h3 class="proj-name">{p.name}</h3>
+              <p class="proj-tagline"><T es={p.tagline.es} en={p.tagline.en} /></p>
+            </div>
+            <span class="proj-index font-mono" aria-hidden="true">0{i + 1}</span>
+          </div>
+
+          <div class="proj-bd">
+            <div class="proj-block">
+              <span class="proj-label font-mono"><T es={ui.problem_label.es} en={ui.problem_label.en} /></span>
+              <p><T es={p.problem.es} en={p.problem.en} /></p>
+            </div>
+            <div class="proj-block">
+              <span class="proj-label font-mono"><T es={ui.solution_label.es} en={ui.solution_label.en} /></span>
+              <p><T es={p.solution.es} en={p.solution.en} /></p>
+            </div>
+          </div>
+
+          <ul class="proj-highlights">
+            {p.highlights.map((h) => (
+              <li><span class="hl-mark" aria-hidden="true">◆</span><T es={h.es} en={h.en} /></li>
+            ))}
+          </ul>
+
+          <div class="proj-stack">
+            <span class="proj-label font-mono"><T es={ui.stack_label.es} en={ui.stack_label.en} /></span>
+            <div class="chips">
+              {p.stack.map((s) => <span class="chip">{s}</span>)}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .proj-head { max-width: 60ch; margin-bottom: 3rem; }
+  .proj-list { display: grid; gap: 2rem; }
+  .proj { padding: clamp(1.6rem, 1.2rem + 1.6vw, 2.6rem); }
+
+  .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .proj-meta { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-2); }
+  .proj-name { font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.6rem); margin-top: 0.6rem; }
+  .proj-tagline { margin-top: 0.6rem; color: var(--text-soft); max-width: 48ch; font-size: 1.05rem; }
+  .proj-index { font-size: 2.4rem; color: rgba(var(--glow), 0.35); line-height: 1; }
+
+  .proj-bd { display: grid; gap: 1.6rem; margin-top: 2rem; }
+  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem; }
+  .proj-block p { color: var(--text-soft); }
+
+  .proj-highlights { list-style: none; display: grid; gap: 0.85rem; margin-top: 1.8rem; padding-top: 1.8rem; border-top: 1px solid var(--border); }
+  .proj-highlights li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.98rem; }
+  .hl-mark { color: var(--accent); font-size: 0.7rem; line-height: 1.7; }
+
+  .proj-stack { margin-top: 1.8rem; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+  @media (min-width: 760px) {
+    .proj-bd { grid-template-columns: 1fr 1fr; gap: 2.4rem; }
+  }
+</style>

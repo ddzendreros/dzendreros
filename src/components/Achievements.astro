@@ -1,0 +1,81 @@
+---
+import { achievements } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+const base = import.meta.env.BASE_URL;
+---
+
+<section id="achievements" class="section" data-palette="talent">
+  <div class="shell">
+    <div class="ach-head">
+      <p class="kicker reveal"><T es={ui.achievements_kicker.es} en={ui.achievements_kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1"><T es={ui.achievements_title.es} en={ui.achievements_title.en} /></h2>
+      <p class="section-lead reveal" data-delay="2"><T es={ui.achievements_lead.es} en={ui.achievements_lead.en} /></p>
+    </div>
+
+    <div class="ach-list">
+      {achievements.map((a) => (
+        <article class="ach card reveal" data-palette={a.palette}>
+          <div class="ach-gallery">
+            {a.images.map((img, i) => (
+              <img
+                class={`ach-img ${i === 0 ? "is-main" : ""}`}
+                src={`${base}images/${img.src}`}
+                alt={a.id === "talentland" ? img.alt.es : img.alt.es}
+                loading="lazy"
+                width="600" height="400"
+              />
+            ))}
+          </div>
+
+          <div class="ach-body">
+            <div class="ach-award"><span class="chip">🏆 <T es={a.award.es} en={a.award.en} /></span></div>
+            <h3 class="ach-name">{a.name}</h3>
+            <p class="ach-subtitle"><T es={a.subtitle.es} en={a.subtitle.en} /></p>
+            <p class="ach-org font-mono">
+              <T es={a.org.es} en={a.org.en} /> · <T es={a.date.es} en={a.date.en} />
+            </p>
+
+            <p class="ach-desc"><T es={a.description.es} en={a.description.en} /></p>
+
+            <div class="ach-role">
+              <span class="proj-label font-mono"><T es={ui.role_label.es} en={ui.role_label.en} /></span>
+              <p><T es={a.role.es} en={a.role.en} /></p>
+            </div>
+
+            <div class="chips">
+              {a.tags.map((t) => <span class="chip">{t}</span>)}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ach-head { max-width: 58ch; margin-bottom: 3rem; }
+  .ach-list { display: grid; gap: 2rem; }
+  .ach { display: grid; grid-template-columns: 1fr; overflow: hidden; }
+
+  .ach-gallery { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; min-height: 240px; background: var(--bg-soft); }
+  .ach-img { width: 100%; height: 100%; object-fit: cover; filter: saturate(0.95) brightness(0.92); transition: filter 0.4s ease, transform 0.6s ease; }
+  .ach-img.is-main { grid-row: 1 / span 2; }
+  .ach:hover .ach-img { filter: saturate(1.05) brightness(1); }
+
+  .ach-body { padding: clamp(1.6rem, 1.2rem + 1.6vw, 2.6rem); display: flex; flex-direction: column; gap: 0.55rem; }
+  .ach-award { margin-bottom: 0.4rem; }
+  .ach-name { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.3rem); }
+  .ach-subtitle { color: var(--text-soft); font-size: 1.02rem; }
+  .ach-org { font-size: 0.74rem; color: var(--accent-2); letter-spacing: 0.02em; margin-top: 0.2rem; }
+  .ach-desc { color: var(--text-soft); margin-top: 0.9rem; }
+  .ach-role { margin-top: 0.4rem; }
+  .ach-role p { color: var(--text-soft); }
+  .ach-body .chips { margin-top: 1.1rem; }
+  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; margin-top: 0.6rem; }
+
+  @media (min-width: 900px) {
+    .ach { grid-template-columns: 0.95fr 1.05fr; }
+    .ach-gallery { min-height: 100%; }
+  }
+</style>

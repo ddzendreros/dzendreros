@@ -1,0 +1,127 @@
+---
+import "../styles/global.css";
+import { profile } from "../data/content";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = `${profile.shortName} — ${profile.role.es}`,
+  description = profile.intro.es,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL;
+const ogImage = `${base}images/diego-portrait.jpg`;
+---
+
+<!doctype html>
+<html lang="es" data-lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <meta name="theme-color" content="#07080c" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Idioma: fijar antes del primer paint para evitar parpadeo -->
+    <script is:inline>
+      (function () {
+        try {
+          var l = localStorage.getItem("lang");
+          if (!l) {
+            l = (navigator.language || "es").toLowerCase().startsWith("en") ? "en" : "es";
+          }
+          document.documentElement.setAttribute("data-lang", l);
+          document.documentElement.setAttribute("lang", l);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+
+    <!-- ── Paleta dinámica: el acento global muta según la sección visible ── -->
+    <script is:inline>
+      (function () {
+        const root = document.documentElement;
+        const sections = Array.from(document.querySelectorAll("[data-palette]"));
+        if (!sections.length) return;
+
+        function readPalette(el) {
+          const s = getComputedStyle(el);
+          return {
+            glow: s.getPropertyValue("--glow").trim(),
+            accent: s.getPropertyValue("--accent").trim(),
+            accent2: s.getPropertyValue("--accent-2").trim(),
+          };
+        }
+        function apply(el) {
+          const p = readPalette(el);
+          root.style.setProperty("--page-glow", p.glow);
+          root.style.setProperty("--page-accent", p.accent);
+        }
+
+        let current = null;
+        const io = new IntersectionObserver(
+          (entries) => {
+            // Sección con mayor intersección manda
+            let best = null;
+            for (const e of entries) {
+              if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
+                best = e;
+              }
+            }
+            if (best && best.target !== current) {
+              current = best.target;
+              apply(current);
+            }
+          },
+          { threshold: [0.25, 0.5, 0.75], rootMargin: "-35% 0px -35% 0px" }
+        );
+        sections.forEach((s) => io.observe(s));
+        apply(sections[0]);
+      })();
+    </script>
+
+    <!-- ── Reveal al hacer scroll ── -->
+    <script is:inline>
+      (function () {
+        const els = document.querySelectorAll(".reveal");
+        if (!("IntersectionObserver" in window) || !els.length) {
+          els.forEach((e) => e.classList.add("is-in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("is-in");
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+        );
+        els.forEach((e) => io.observe(e));
+      })();
+    </script>
+  </body>
+</html>

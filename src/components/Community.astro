@@ -1,0 +1,51 @@
+---
+import { community } from "../data/content";
+import T from "./T.astro";
+const base = import.meta.env.BASE_URL;
+---
+
+<section id="community" class="section" data-palette="sice">
+  <div class="shell comm-grid">
+    <div class="comm-copy">
+      <p class="kicker reveal"><T es={community.kicker.es} en={community.kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1"><T es={community.title.es} en={community.title.en} /></h2>
+      <p class="comm-org font-mono reveal" data-delay="1">
+        {community.org} · <T es={community.date.es} en={community.date.en} />
+      </p>
+      <p class="section-lead reveal" data-delay="2"><T es={community.description.es} en={community.description.en} /></p>
+
+      <ul class="comm-topics reveal" data-delay="2">
+        {community.topics.map((t) => (
+          <li><span class="hl-mark" aria-hidden="true">▹</span><T es={t.es} en={t.en} /></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="comm-media reveal" data-delay="2">
+      <div class="comm-frame">
+        <img src={`${base}images/sice-keyart.png`} alt="SICE México — Masterclass" loading="lazy" width="520" height="520" />
+      </div>
+      <div class="comm-frame comm-frame--sm">
+        <img src={`${base}images/sice-session.jpg`} alt="Sesión de la masterclass" loading="lazy" width="320" height="240" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .comm-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+  .comm-org { color: var(--accent-2); font-size: 0.76rem; margin-top: 1rem; letter-spacing: 0.04em; }
+  .comm-topics { list-style: none; display: grid; gap: 0.75rem; margin-top: 2rem; }
+  .comm-topics li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); }
+  .hl-mark { color: var(--accent); }
+
+  .comm-media { position: relative; justify-self: center; max-width: 460px; width: 100%; }
+  .comm-frame { border-radius: 1.2rem; overflow: hidden; border: 1px solid var(--border-strong); box-shadow: 0 36px 80px -40px rgba(var(--page-glow), 0.6); }
+  .comm-frame img { display: block; width: 100%; height: auto; }
+  .comm-frame--sm { position: absolute; right: -14px; bottom: -22px; width: 42%; border-width: 3px; border-color: var(--bg); box-shadow: 0 24px 50px -28px rgba(0,0,0,0.8); }
+
+  @media (min-width: 920px) {
+    .comm-grid { grid-template-columns: 1.1fr 0.9fr; gap: 4rem; }
+    .comm-media { justify-self: end; }
+  }
+</style>

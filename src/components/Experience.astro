@@ -1,0 +1,101 @@
+---
+import { experience, education, skills } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+---
+
+<section id="experience" class="section" data-palette="steel">
+  <div class="shell">
+    <div class="exp-head">
+      <p class="kicker reveal"><T es={ui.experience_kicker.es} en={ui.experience_kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1"><T es={ui.experience_title.es} en={ui.experience_title.en} /></h2>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-timeline">
+        {experience.map((job, i) => (
+          <article class="job reveal" data-delay={i}>
+            <div class="job-rail" aria-hidden="true"><span class="job-dot"></span></div>
+            <div class="job-body">
+              <div class="job-top">
+                <h3 class="job-role"><T es={job.role.es} en={job.role.en} /></h3>
+                <span class="job-period font-mono"><T es={job.period.es} en={job.period.en} /></span>
+              </div>
+              <p class="job-company">{job.company} · <span class="job-loc"><T es={job.location.es} en={job.location.en} /></span></p>
+              <ul class="job-bullets">
+                {job.bullets.map((b) => (
+                  <li><span class="hl-mark" aria-hidden="true">◆</span><T es={b.es} en={b.en} /></li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <aside class="exp-side">
+        <div class="side-block reveal">
+          <span class="proj-label font-mono"><T es={ui.education_label.es} en={ui.education_label.en} /></span>
+          <ul class="edu-list">
+            {education.map((e) => (
+              <li>
+                <strong><T es={e.degree.es} en={e.degree.en} /></strong>
+                <span class="edu-school">{e.school}</span>
+                <span class="edu-period font-mono"><T es={e.period.es} en={e.period.en} /></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="side-block reveal" data-delay="1">
+          <span class="proj-label font-mono"><T es={ui.skills_label.es} en={ui.skills_label.en} /></span>
+          <div class="skills">
+            {skills.map((g) => (
+              <div class="skill-group">
+                <span class="skill-name font-mono"><T es={g.group.es} en={g.group.en} /></span>
+                <div class="chips">{g.items.map((it) => <span class="chip">{it}</span>)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exp-head { margin-bottom: 3rem; }
+  .exp-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+
+  .exp-timeline { display: grid; gap: 2.2rem; }
+  .job { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; }
+  .job-rail { position: relative; width: 14px; display: flex; justify-content: center; }
+  .job-rail::before { content: ""; position: absolute; top: 6px; bottom: -2.2rem; width: 1px; background: var(--border-strong); }
+  .job:last-child .job-rail::before { display: none; }
+  .job-dot { width: 12px; height: 12px; border-radius: 99px; background: var(--accent); box-shadow: 0 0 0 5px rgba(var(--glow), 0.16); margin-top: 5px; }
+
+  .job-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; justify-content: space-between; }
+  .job-role { font-size: 1.3rem; }
+  .job-period { font-size: 0.76rem; color: var(--accent-2); }
+  .job-company { color: var(--text-soft); margin-top: 0.35rem; font-size: 0.95rem; }
+  .job-loc { color: var(--text-dim); }
+  .job-bullets { list-style: none; display: grid; gap: 0.7rem; margin-top: 1rem; }
+  .job-bullets li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.96rem; }
+  .hl-mark { color: var(--accent); font-size: 0.7rem; line-height: 1.7; }
+
+  .exp-side { display: grid; gap: 2.4rem; align-content: start; }
+  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; }
+  .edu-list { list-style: none; display: grid; gap: 1.3rem; }
+  .edu-list li { display: grid; gap: 0.25rem; }
+  .edu-list strong { font-weight: 500; }
+  .edu-school { color: var(--text-soft); font-size: 0.9rem; }
+  .edu-period { color: var(--text-dim); font-size: 0.74rem; }
+
+  .skills { display: grid; gap: 1.3rem; }
+  .skill-group { display: grid; gap: 0.6rem; }
+  .skill-name { font-size: 0.74rem; color: var(--text-soft); letter-spacing: 0.04em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+  @media (min-width: 940px) {
+    .exp-grid { grid-template-columns: 1.4fr 0.9fr; gap: 4rem; }
+  }
+</style>

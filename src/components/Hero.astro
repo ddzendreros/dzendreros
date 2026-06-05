@@ -1,0 +1,107 @@
+---
+import { profile } from "../data/content";
+import { ui } from "../data/ui";
+import T from "./T.astro";
+const base = import.meta.env.BASE_URL;
+---
+
+<section id="home" class="hero section" data-palette="gold">
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <p class="kicker reveal">
+        <T es={profile.role.es} en={profile.role.en} />
+      </p>
+
+      <h1 class="hero-title reveal" data-delay="1">
+        <T es={profile.headline.es} en={profile.headline.en} />
+      </h1>
+
+      <p class="hero-intro section-lead reveal" data-delay="2">
+        <T es={profile.intro.es} en={profile.intro.en} />
+      </p>
+
+      <div class="hero-actions reveal" data-delay="3">
+        <a class="btn btn-primary" href="#projects">
+          <T es={ui.cta_projects.es} en={ui.cta_projects.en} />
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn btn-ghost" href={`mailto:${profile.email}`}>
+          <T es={ui.cta_contact.es} en={ui.cta_contact.en} />
+        </a>
+      </div>
+
+      <div class="hero-meta reveal" data-delay="3">
+        <span class="font-mono">📍 <T es={profile.location.es} en={profile.location.en} /></span>
+        <a class="font-mono link-underline" href={`mailto:${profile.email}`}>{profile.email}</a>
+      </div>
+    </div>
+
+    <div class="hero-portrait reveal" data-delay="2">
+      <div class="portrait-frame">
+        <img
+          src={`${base}images/diego-portrait.jpg`}
+          alt={profile.name}
+          width="430"
+          height="560"
+          fetchpriority="high"
+        />
+        <div class="portrait-glow" aria-hidden="true"></div>
+      </div>
+      <div class="portrait-badge font-mono">
+        <span class="dot"></span>
+        <T es="Disponible para oportunidades" en="Open to opportunities" />
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint font-mono" aria-hidden="true">
+    <T es={ui.scroll.es} en={ui.scroll.en} /><span class="scroll-line"></span>
+  </div>
+</section>
+
+<style>
+  .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 92px; }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;
+  }
+  .hero-title {
+    font-size: clamp(2.6rem, 1.6rem + 6vw, 5.2rem);
+    margin-top: 1.4rem; line-height: 1.0;
+  }
+  .hero-intro { margin-top: 1.6rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.2rem; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: 2.2rem; font-size: 0.85rem; color: var(--text-dim); }
+
+  .hero-portrait { position: relative; justify-self: center; max-width: 380px; width: 100%; }
+  .portrait-frame {
+    position: relative; border-radius: 1.4rem; overflow: hidden;
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 40px 90px -40px rgba(var(--page-glow), 0.6);
+  }
+  .portrait-frame img { display: block; width: 100%; height: auto; filter: saturate(1.02) contrast(1.02); }
+  .portrait-glow {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgba(7,8,12,0.55));
+    mix-blend-mode: multiply;
+  }
+  .portrait-badge {
+    position: absolute; left: 50%; bottom: -18px; transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap;
+    padding: 0.5rem 0.95rem; border-radius: 99px; font-size: 0.74rem;
+    background: rgba(7,8,12,0.82); border: 1px solid var(--border-strong);
+    backdrop-filter: blur(8px); color: var(--text-soft);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 99px; background: #2fcf6b; box-shadow: 0 0 0 4px rgba(47,207,107,0.18); }
+
+  .scroll-hint {
+    position: absolute; left: 50%; bottom: 1.8rem; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+    font-size: 0.66rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .scroll-line { width: 1px; height: 38px; background: linear-gradient(var(--accent), transparent); }
+
+  @media (min-width: 940px) {
+    .hero-grid { grid-template-columns: 1.25fr 0.85fr; gap: 4rem; }
+    .hero-portrait { justify-self: end; }
+  }
+</style>
