@@ -3,17 +3,19 @@ import { profile } from "../data/content";
 import { ui } from "../data/ui";
 import T from "./T.astro";
 import Terminal from "./Terminal.astro";
+import NeuralField from "./NeuralField.astro";
 const base = import.meta.env.BASE_URL;
 ---
 
-<section id="home" class="hero section" data-palette="gold">
+<section id="home" class="hero section" data-palette="iris">
+  <NeuralField />
   <div class="shell hero-grid">
     <div class="hero-copy">
       <p class="kicker reveal">
         <T es={profile.role.es} en={profile.role.en} />
       </p>
 
-      <h1 class="hero-title reveal" data-delay="1">
+      <h1 class="hero-title reveal" data-delay="1" data-decode>
         <T es={profile.headline.es} en={profile.headline.en} />
       </h1>
 
@@ -49,14 +51,20 @@ const base = import.meta.env.BASE_URL;
 </section>
 
 <style>
-  .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 88px; position: relative; }
+  .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 88px; position: relative; overflow: hidden; }
   .hero-grid {
     display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center;
+    position: relative; z-index: 2;
   }
   .hero-title {
     font-size: clamp(2.4rem, 1.4rem + 5vw, 4.8rem);
     margin-top: 1.2rem; line-height: 1.05;
     font-weight: 500;
+    /* Barrido morado → azul → verde: la paleta de marca en el titular */
+    background: linear-gradient(115deg, #f5f2ec 0%, #c4b8ff 36%, #84b6ff 68%, #6fe0ad 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .hero-intro { margin-top: 1.4rem; max-width: 52ch; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
@@ -93,6 +101,7 @@ const base = import.meta.env.BASE_URL;
     text-transform: uppercase;
     color: var(--text-dim);
     user-select: none;
+    z-index: 2;
   }
   .scroll-line { 
     width: 1px; 

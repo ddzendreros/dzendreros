@@ -4,7 +4,7 @@ import { ui } from "../data/ui";
 import T from "./T.astro";
 ---
 
-<section id="projects" class="section" data-palette="gold">
+<section id="projects" class="section" data-palette="iris">
   <div class="shell">
     <div class="proj-head">
       <p class="kicker reveal"><T es={ui.projects_kicker.es} en={ui.projects_kicker.en} /></p>
@@ -155,6 +155,16 @@ import T from "./T.astro";
   .arrow {
     color: var(--text-dim);
     user-select: none;
+    animation: arrow-flow 2.6s infinite ease-in-out;
+  }
+  /* Señal que recorre el grafo de izquierda a derecha (flujo de datos) */
+  .flow-nodes .arrow:nth-child(2) { animation-delay: 0s; }
+  .flow-nodes .arrow:nth-child(4) { animation-delay: 0.32s; }
+  .flow-nodes .arrow:nth-child(6) { animation-delay: 0.64s; }
+  .flow-nodes .arrow:nth-child(8) { animation-delay: 0.96s; }
+  @keyframes arrow-flow {
+    0%, 70%, 100% { color: var(--text-dim); text-shadow: none; transform: translateX(0); }
+    35% { color: var(--accent-2); text-shadow: 0 0 8px rgba(var(--glow), 0.7); transform: translateX(2px); }
   }
 
   /* Animaciones de Nodos al Hover de la Tarjeta */

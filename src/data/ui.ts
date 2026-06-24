@@ -3,6 +3,7 @@ import type { T } from "./content";
 /* Cadenas de interfaz (nav, botones, encabezados de sección) */
 export const nav: { id: string; label: T }[] = [
   { id: "about", label: { es: "Sobre mí", en: "About" } },
+  { id: "anatomy", label: { es: "Agentes", en: "Agents" } },
   { id: "projects", label: { es: "Proyectos", en: "Projects" } },
   { id: "achievements", label: { es: "Logros", en: "Achievements" } },
   { id: "community", label: { es: "Comunidad", en: "Community" } },
