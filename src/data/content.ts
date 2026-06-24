@@ -25,10 +25,9 @@ export const profile = {
   } as T,
   location: { es: "Ciudad de México, México", en: "Mexico City, Mexico" } as T,
   email: "ddczendreros@gmail.com",
-  // ⚠️ Reemplaza con tus URLs reales antes de publicar:
   links: {
     github: "https://github.com/ddzendreros",
-    linkedin: "https://www.linkedin.com/in/tu-perfil",
+    linkedin: "https://www.linkedin.com/in/dzendreros/",
   },
 };
 
@@ -124,6 +123,7 @@ export const projects: Project[] = [
 export type Achievement = {
   id: string;
   palette: string;
+  repo?: string;
   award: T;
   name: string;
   subtitle: T;
@@ -157,6 +157,31 @@ export const achievements: Achievement[] = [
       { src: "talentland-podium.jpg", alt: { es: "Equipo en el podio de Talent Land México", en: "Team on the Talent Land Mexico stage" } },
       { src: "talentland-team.jpg", alt: { es: "Equipo Xolum con el equipo de Talent Land e IBM", en: "Team Xolum with Talent Land and IBM" } },
       { src: "talentland-cert.png", alt: { es: "Certificado de finalista Top 3", en: "Top 3 finalist certificate" } },
+    ],
+  },
+  {
+    id: "bob",
+    palette: "bob",
+    repo: "https://github.com/DDamianZR/pr-surgeon",
+    award: { es: "Certificado · Desempeño destacado", en: "Certificate · Outstanding performance" },
+    name: "PR Surgeon",
+    subtitle: {
+      es: "IBM Bob Hackathon 2026 — Descomposición inteligente de Pull Requests",
+      en: "IBM Bob Hackathon 2026 — Intelligent Pull Request decomposition",
+    },
+    org: { es: "lablab.ai · IBM watsonx", en: "lablab.ai · IBM watsonx" },
+    date: { es: "15–17 de mayo de 2026", en: "May 15–17, 2026" },
+    description: {
+      es: "Las migraciones empresariales generan Pull Requests gigantes (300+ archivos) que tardan semanas en revisarse, cuestan miles de dólares en horas de ingeniería e introducen regresiones. PR Surgeon descompone esos PRs monstruosos en 5–7 sub-PRs seguros y revisables: analiza las dependencias reales entre archivos (imports, referencias, herencia), agrupa el código fuertemente acoplado con detección de comunidades sobre un grafo y respeta las capas de la arquitectura.",
+      en: "Enterprise migrations produce monster Pull Requests (300+ files) that take weeks to review, cost thousands in engineering time and introduce regressions. PR Surgeon decomposes those monster PRs into 5–7 safe, reviewable sub-PRs: it analyzes real inter-file dependencies (imports, references, inheritance), clusters tightly-coupled code with graph community detection and respects architectural layers.",
+    },
+    role: {
+      es: "Construí la solución durante el IBM Bob Hackathon apoyándome en IBM Bob y su conciencia de repositorio para un análisis de dependencias confiable. Cada sub-PR se enriquece con descripción, evaluación de riesgo y sugerencia de revisores, y se visualiza como un grafo interactivo. Backend en FastAPI + networkx; frontend en Next.js + React Flow; integración con watsonx.ai.",
+      en: "I built the solution during the IBM Bob Hackathon, leaning on IBM Bob's repository awareness for trustworthy dependency analysis. Each sub-PR is enriched with a description, risk assessment and reviewer suggestions, and visualized as an interactive graph. FastAPI + networkx backend; Next.js + React Flow frontend; watsonx.ai integration.",
+    },
+    tags: ["IBM watsonx", "IBM Bob", "FastAPI", "networkx", "Next.js", "React Flow", "Graph clustering"],
+    images: [
+      { src: "ibm-bob-cert.jpg", alt: { es: "Certificado del IBM Bob Hackathon otorgado a Diego Canales", en: "IBM Bob Hackathon certificate awarded to Diego Canales" } },
     ],
   },
   {
