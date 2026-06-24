@@ -28,6 +28,7 @@ export const profile = {
   links: {
     github: "https://github.com/ddzendreros",
     linkedin: "https://www.linkedin.com/in/dzendreros/",
+    instagram: "https://www.instagram.com/diego_zr.p/",
   },
 };
 
