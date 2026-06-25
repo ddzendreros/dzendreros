@@ -1,7 +1,7 @@
 # Diego Zendreros — Portafolio
 
 > **Ingeniero en Inteligencia Artificial · Constructor de agentes autónomos**
-> Sitio personal bilingüe (ES/EN). Tema oscuro obsidiana con una paleta —verde · azul · morado— que muta según la sección en pantalla.
+> Sitio personal (ES/EN). Tema oscuro obsidiana con una paleta —verde · azul · morado— que muta según la sección en pantalla.
 
 🔗 **En vivo:** https://ddzendreros.github.io/dzendreros/
 
