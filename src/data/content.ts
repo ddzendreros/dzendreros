@@ -20,8 +20,8 @@ export const profile = {
     en: "I don't just write code.\nI design intelligence.",
   } as T,
   intro: {
-    es: "Estudiante de Ingeniería en Inteligencia Artificial en ESCOM (IPN) que construye sistemas agénticos: del prompt al sistema autónomo. He reducido tiempos operativos hasta un 95% con automatización en Python y llevado proyectos de IA a finales de hackathons nacionales.",
-    en: "AI Engineering student at ESCOM (IPN) building agentic systems — from prompt to autonomous system. I've cut operational time by up to 95% with Python automation and taken AI projects to the finals of national hackathons.",
+    es: "Construyo sistemas agénticos de IA, del prompt al sistema autónomo. Formado en Ingeniería en Inteligencia Artificial en ESCOM (IPN), ya he recortado tiempos operativos hasta un 95% con automatización en Python y llevado proyectos de IA a finales de hackathons nacionales.",
+    en: "I build agentic AI systems, from prompt to autonomous system. Trained in AI Engineering at ESCOM (IPN), I've already cut operational time by up to 95% with Python automation and taken AI projects to the finals of national hackathons.",
   } as T,
   location: { es: "Ciudad de México, México", en: "Mexico City, Mexico" } as T,
   email: "ddczendreros@gmail.com",

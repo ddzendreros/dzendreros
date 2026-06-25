@@ -39,7 +39,7 @@ export const ui = {
 
   contact_kicker: { es: "Contacto", en: "Contact" } as T,
   contact_title: { es: "Construyamos algo que razone", en: "Let's build something that reasons" } as T,
-  contact_lead: { es: "Abierto a oportunidades en ingeniería de IA, sistemas agénticos y automatización. ¿Tienes un reto interesante?", en: "Open to opportunities in AI engineering, agentic systems and automation. Got an interesting challenge?" } as T,
+  contact_lead: { es: "Si tu equipo está resolviendo un problema difícil con IA —agentes, LLMs o automatización—, me interesa escucharlo. Escríbeme y lo conversamos.", en: "If your team is solving a hard problem with AI —agents, LLMs or automation—, I'd like to hear about it. Write me and let's talk." } as T,
   email_label: { es: "Escríbeme", en: "Email me" } as T,
   rights: { es: "Diseñado y construido por Diego Zendreros.", en: "Designed and built by Diego Zendreros." } as T,
 };
