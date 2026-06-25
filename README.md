@@ -3,7 +3,7 @@
 > **Ingeniero en Inteligencia Artificial · Constructor de agentes autónomos**
 > Sitio personal bilingüe (ES/EN). Tema oscuro obsidiana con una paleta —verde · azul · morado— que muta según la sección en pantalla.
 
-🔗 **En vivo:** https://ddzendreros.github.io/ddzendreros/
+🔗 **En vivo:** https://ddzendreros.github.io/dzendreros/
 
 Diseñé y construí este portafolio para contar, con la estética y el lenguaje de mi propio campo, quién soy como ingeniero de IA: del prompt al sistema autónomo. No es una plantilla — cada interacción está pensada para reforzar la marca: grafos de razonamiento, tokens, pipelines y arquitecturas de agentes.
 
@@ -44,7 +44,7 @@ Todo el contenido vive en una única fuente de verdad: [`src/data/content.ts`](s
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321/ddzendreros/
+npm run dev      # http://localhost:4321/dzendreros/
 npm run build    # compila el sitio en docs/ (genera .nojekyll)
 npm run preview  # sirve docs/ localmente
 ```
@@ -56,7 +56,7 @@ El sitio se compila en **`docs/`** (configurado en `astro.config.mjs`). Para pub
 1. `npm run build` y commitea la carpeta `docs/`.
 2. **Settings → Pages → Build and deployment** → *Deploy from a branch* → rama `main`, carpeta `/docs`.
 
-> El `base` ya apunta a `/ddzendreros/`. Cada cambio de contenido: `npm run build` + commit de `docs/`.
+> El `base` ya apunta a `/dzendreros/`. Cada cambio de contenido: `npm run build` + commit de `docs/`.
 
 ---
 
