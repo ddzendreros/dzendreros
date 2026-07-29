@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <header class="nav-dock-container" id="main-nav">
-  <div class="nav-dock">
+  <div class="nav-dock card">
     <a class="brand" href="#home" aria-label={profile.shortName}>
       <img class="brand-logo" src={`${base}images/logo-mark.png`} alt="" width="28" height="29" />
       <span class="brand-name font-display">{profile.shortName}</span>
@@ -14,6 +14,7 @@ const base = import.meta.env.BASE_URL;
 
     <div class="nav-divider" aria-hidden="true"></div>
 
+    <!-- Navegación escritorio -->
     <nav class="nav-links" aria-label="Navegación principal">
       {nav.map((item) => (
         <a href={`#${item.id}`} class="nav-link font-mono" data-nav-item={item.id}>
@@ -49,7 +50,7 @@ const base = import.meta.env.BASE_URL;
   </div>
 
   <!-- Mobile Drawer Overlay -->
-  <div id="mobile-drawer" class="mobile-drawer" aria-hidden="true">
+  <div id="mobile-drawer" class="mobile-drawer card" aria-hidden="true">
     <nav class="mobile-nav-links" aria-label="Menú móvil">
       {nav.map((item) => (
         <a href={`#${item.id}`} class="mobile-nav-link font-mono">
@@ -149,7 +150,7 @@ const base = import.meta.env.BASE_URL;
 <style>
   .nav-dock-container {
     position: fixed;
-    top: var(--space-4);
+    bottom: var(--space-4);
     left: 50%;
     transform: translateX(-50%);
     width: min(1140px, 92vw);
@@ -164,11 +165,11 @@ const base = import.meta.env.BASE_URL;
     padding-inline: var(--space-4);
     gap: var(--space-3);
     background: var(--bg-glass);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-full);
-    box-shadow: var(--shadow-md), var(--shadow-neon);
+    box-shadow: var(--shadow-lg), var(--shadow-neon);
   }
 
   .brand {
@@ -214,14 +215,14 @@ const base = import.meta.env.BASE_URL;
 
   .nav-link:hover {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.06);
   }
 
   .nav-link.is-active {
     color: #ffffff;
     background: var(--accent);
     font-weight: 500;
-    box-shadow: 0 0 12px rgba(var(--page-glow), 0.5);
+    box-shadow: 0 0 12px rgba(var(--page-glow), 0.6);
   }
 
   .nav-actions {
@@ -289,10 +290,10 @@ const base = import.meta.env.BASE_URL;
   .mobile-drawer {
     display: none;
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 0;
     right: 0;
-    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     background: var(--bg-surface-base);
     border: 1px solid var(--border-medium);
     border-radius: var(--radius-lg);
@@ -302,11 +303,11 @@ const base = import.meta.env.BASE_URL;
 
   .mobile-drawer.is-open {
     display: block;
-    animation: drawer-in var(--dur-fast) var(--ease-spring);
+    animation: drawer-up var(--dur-fast) var(--ease-spring);
   }
 
-  @keyframes drawer-in {
-    from { opacity: 0; transform: translateY(-8px); }
+  @keyframes drawer-up {
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -316,6 +317,16 @@ const base = import.meta.env.BASE_URL;
   .mobile-cta { margin-top: var(--space-2); width: 100%; }
 
   @media (min-width: 900px) {
+    .nav-dock-container {
+      top: var(--space-4);
+      bottom: auto;
+    }
+    .mobile-drawer {
+      top: 100%;
+      bottom: auto;
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+    }
     .nav-divider { display: block; }
     .nav-links { display: flex; }
     .nav-cta { display: inline-flex; }

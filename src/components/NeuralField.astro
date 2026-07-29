@@ -1,7 +1,7 @@
 ---
 /* ════════════════════════════════════════════════════════════════════════
-   NeuralField — Grafo ambiental de razonamiento en Canvas
-   Obsidian Editorial Engineering
+   NeuralField — Interactive Neural Network Background Canvas
+   Bespoke Craftsmanship & High-Performance Animation
    ════════════════════════════════════════════════════════════════════════ */
 ---
 
@@ -19,7 +19,7 @@
     let W = 0, H = 0, DPR = 1;
     let nodes = [];
     let signals = [];
-    let glow = [129, 140, 248];
+    let glow = [99, 102, 241];
     let raf = null;
     let visible = true;
     let frame = 0;
@@ -43,25 +43,25 @@
     }
 
     function build() {
-      const target = Math.round(Math.min(48, Math.max(16, (W * H) / 26000)));
+      const target = Math.round(Math.min(65, Math.max(22, (W * H) / 18000)));
       nodes = [];
       for (let i = 0; i < target; i++) {
         nodes.push({
           x: Math.random() * W,
           y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 0.14,
-          vy: (Math.random() - 0.5) * 0.14,
-          r: Math.random() * 1.3 + 0.6,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: (Math.random() - 0.5) * 0.22,
+          r: Math.random() * 1.8 + 0.8,
           pulse: Math.random() * Math.PI * 2,
         });
       }
       signals = [];
     }
 
-    const LINK = 120;
+    const LINK = 140;
 
     function spawnSignal() {
-      if (nodes.length < 2 || signals.length > 4) return;
+      if (nodes.length < 2 || signals.length > 7) return;
       const a = (Math.random() * nodes.length) | 0;
       let best = -1, bestD = LINK * LINK;
       for (let j = 0; j < nodes.length; j++) {
@@ -69,29 +69,29 @@
         const dx = nodes[a].x - nodes[j].x;
         const dy = nodes[a].y - nodes[j].y;
         const d = dx * dx + dy * dy;
-        if (d < bestD && Math.random() > 0.5) { bestD = d; best = j; }
+        if (d < bestD && Math.random() > 0.4) { bestD = d; best = j; }
       }
       if (best === -1) return;
-      signals.push({ a, b: best, t: 0, speed: 0.01 + Math.random() * 0.015 });
+      signals.push({ a, b: best, t: 0, speed: 0.012 + Math.random() * 0.02 });
     }
 
     function step() {
       frame++;
-      if (frame % 45 === 0) readGlow();
+      if (frame % 30 === 0) readGlow();
       ctx.clearRect(0, 0, W, H);
 
       for (const n of nodes) {
         n.x += n.vx;
         n.y += n.vy;
-        if (n.x < -15) n.x = W + 15; else if (n.x > W + 15) n.x = -15;
-        if (n.y < -15) n.y = H + 15; else if (n.y > H + 15) n.y = -15;
+        if (n.x < -20) n.x = W + 20; else if (n.x > W + 20) n.x = -20;
+        if (n.y < -20) n.y = H + 20; else if (n.y > H + 20) n.y = -20;
 
         if (mouse.active) {
           const dx = mouse.x - n.x;
           const dy = mouse.y - n.y;
           const d2 = dx * dx + dy * dy;
-          if (d2 < 22000) {
-            const f = (1 - d2 / 22000) * 0.4;
+          if (d2 < 30000) {
+            const f = (1 - d2 / 30000) * 0.6;
             n.x += (dx / Math.sqrt(d2 + 1)) * f;
             n.y += (dy / Math.sqrt(d2 + 1)) * f;
           }
@@ -99,15 +99,17 @@
       }
 
       const g = glow;
+
+      /* Aristas de conexión */
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            const o = (1 - d / LINK) * 0.18;
+            const o = (1 - d / LINK) * 0.28;
             ctx.strokeStyle = `rgba(${g[0]},${g[1]},${g[2]},${o})`;
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -116,16 +118,23 @@
         }
       }
 
+      /* Nodos que respiran */
       for (const n of nodes) {
-        n.pulse += 0.025;
-        const a = 0.35 + Math.sin(n.pulse) * 0.18;
+        n.pulse += 0.03;
+        const a = 0.4 + Math.sin(n.pulse) * 0.25;
         ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},${a})`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
         ctx.fill();
+
+        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},${a * 0.25})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2);
+        ctx.fill();
       }
 
-      if (Math.random() < 0.03) spawnSignal();
+      /* Paquetes de señal en movimiento */
+      if (Math.random() < 0.06) spawnSignal();
       for (let s = signals.length - 1; s >= 0; s--) {
         const sig = signals[s];
         sig.t += sig.speed;
@@ -135,9 +144,17 @@
         const x = na.x + (nb.x - na.x) * sig.t;
         const y = na.y + (nb.y - na.y) * sig.t;
         const fade = Math.sin(sig.t * Math.PI);
-        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},${0.85 * fade})`;
+        
+        /* Cabeza de la señal */
+        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},${0.95 * fade})`;
         ctx.beginPath();
-        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.arc(x, y, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+
+        /* Resplandor de la señal */
+        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},${0.3 * fade})`;
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -163,8 +180,8 @@
           const dy = nodes[i].y - nodes[j].y;
           const d = Math.sqrt(dx * dx + dy * dy);
           if (d < LINK) {
-            ctx.strokeStyle = `rgba(${g[0]},${g[1]},${g[2]},${(1 - d / LINK) * 0.12})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `rgba(${g[0]},${g[1]},${g[2]},${(1 - d / LINK) * 0.2})`;
+            ctx.lineWidth = 0.7;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -173,21 +190,22 @@
         }
       }
       for (const n of nodes) {
-        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},0.4)`;
+        ctx.fillStyle = `rgba(${g[0]},${g[1]},${g[2]},0.5)`;
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    const host = canvas.parentElement || canvas;
-    host.addEventListener("pointermove", (e) => {
+    const updateMouse = (e) => {
       const rect = canvas.getBoundingClientRect();
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
       mouse.active = true;
-    }, { passive: true });
-    host.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; });
+    };
+
+    window.addEventListener("pointermove", updateMouse, { passive: true });
+    window.addEventListener("pointerleave", () => { mouse.active = false; mouse.x = -9999; mouse.y = -9999; });
 
     const io = new IntersectionObserver((entries) => {
       visible = entries[0].isIntersecting;
@@ -218,8 +236,8 @@
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.55;
-    -webkit-mask-image: radial-gradient(90% 85% at 75% 40%, #000 40%, transparent 100%);
-    mask-image: radial-gradient(90% 85% at 75% 40%, #000 40%, transparent 100%);
+    opacity: 0.75;
+    -webkit-mask-image: radial-gradient(92% 88% at 75% 35%, #000 45%, transparent 100%);
+    mask-image: radial-gradient(92% 88% at 75% 35%, #000 45%, transparent 100%);
   }
 </style>
