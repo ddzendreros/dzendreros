@@ -1,7 +1,7 @@
 ---
 /* ════════════════════════════════════════════════════════════════════════
-   AgentAnatomy — Scrollytelling "Anatomía de un agente"
-   Obsidian Editorial Engineering
+   AgentAnatomy — Interactive Agent Architecture & Scrollytelling
+   Cyber Obsidian UX/UI
    ════════════════════════════════════════════════════════════════════════ */
 import T from "./T.astro";
 
@@ -72,16 +72,26 @@ const steps = [
     </h2>
     <p class="section-lead reveal" data-delay="2">
       <T
-        es="No es un chatbot con un prompt. Es un sistema. Desplázate para ensamblarlo, pieza por pieza."
-        en="It's not a chatbot with a prompt. It's a system. Scroll to assemble it, piece by piece."
+        es="No es un chatbot con un prompt. Es un sistema agéntico completo. Haz clic en las fases o desplázate para explorar la arquitectura."
+        en="It's not a chatbot with a prompt. It's a full agentic system. Click phases or scroll to explore the architecture."
       />
     </p>
+
+    <!-- Selector Táctil Directo UX -->
+    <div class="anatomy-step-buttons reveal" data-delay="3" role="tablist">
+      {steps.map((s) => (
+        <button class="step-nav-btn font-mono" type="button" data-step-btn={s.idx} role="tab">
+          <span>{s.no}</span>
+          <span class="step-btn-title"><T es={s.title.es} en={s.title.en} /></span>
+        </button>
+      ))}
+    </div>
   </div>
 
   <div class="anatomy-scroll" data-steps={steps.length}>
     <div class="anatomy-stage">
       <div class="shell stage-grid">
-        <!-- Diagrama interactivo -->
+        <!-- Diagrama interactivo de red -->
         <div class="stage-diagram" data-active="0">
           <svg class="diagram-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             <line class="link" data-link="1" x1="50" y1="50" x2="20" y2="20" />
@@ -112,19 +122,15 @@ const steps = [
             <span class="node-dot" aria-hidden="true"></span>
             <span class="font-mono">Guardrails</span>
           </div>
-
-          <div class="loop-badge font-mono" aria-hidden="true">
-            Perceive · Reason · Plan · Act · Reflect
-          </div>
         </div>
 
-        <!-- Explicación paso a paso + log -->
+        <!-- Explicación & Log -->
         <div class="stage-copy">
           <div class="step-track">
             {steps.map((s) => (
               <div class="stage-step" data-step={s.idx}>
                 <span class="step-no font-mono">{s.no} / 05</span>
-                <h3 class="step-title"><T es={s.title.es} en={s.title.en} /></h3>
+                <h3 class="step-title font-display"><T es={s.title.es} en={s.title.en} /></h3>
                 <p class="step-body"><T es={s.body.es} en={s.body.en} /></p>
               </div>
             ))}
@@ -135,10 +141,6 @@ const steps = [
               <span class="trace-dot"></span> reasoning trace
             </div>
             <div class="trace-log font-mono" data-trace></div>
-          </div>
-
-          <div class="step-progress" aria-hidden="true">
-            {steps.map((s) => <span class="prog-tick" data-tick={s.idx}></span>)}
           </div>
         </div>
       </div>
@@ -154,9 +156,8 @@ const steps = [
       const steps = section.querySelectorAll(".stage-step");
       const sats = section.querySelectorAll(".node-sat");
       const links = section.querySelectorAll(".link");
-      const ticks = section.querySelectorAll(".prog-tick");
+      const stepBtns = section.querySelectorAll("[data-step-btn]");
       const traceLog = section.querySelector("[data-trace]");
-      const total = steps.length;
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       let current = -1;
@@ -167,7 +168,7 @@ const steps = [
         diagram.setAttribute("data-active", String(idx));
 
         steps.forEach((s) => s.classList.toggle("is-active", +s.dataset.step === idx));
-        ticks.forEach((t) => t.classList.toggle("is-on", +t.dataset.tick <= idx));
+        stepBtns.forEach((b) => b.classList.toggle("is-active", +b.dataset.stepBtn === idx));
         sats.forEach((n) => n.classList.toggle("is-on", +n.dataset.node <= idx));
         links.forEach((l) => l.classList.toggle("is-on", +l.dataset.link <= idx));
 
@@ -182,12 +183,18 @@ const steps = [
         }
       }
 
+      stepBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = +btn.dataset.stepBtn;
+          setActive(idx);
+        });
+      });
+
       if (reduce || window.innerWidth < 880) {
         section.classList.add("reduced");
         steps.forEach((s) => s.classList.add("is-active"));
         sats.forEach((n) => n.classList.add("is-on"));
         links.forEach((l) => l.classList.add("is-on"));
-        ticks.forEach((t) => t.classList.add("is-on"));
         if (traceLog) traces.forEach((tx) => {
           const line = document.createElement("div");
           line.className = "trace-line";
@@ -207,24 +214,55 @@ const steps = [
           const dist = rect.height - window.innerHeight;
           const passed = Math.min(Math.max(-rect.top, 0), dist);
           const progress = dist > 0 ? passed / dist : 0;
-          const idx = Math.min(total - 1, Math.floor(progress * total * 0.999));
+          const idx = Math.min(steps.length - 1, Math.floor(progress * steps.length * 0.999));
           setActive(idx < 0 ? 0 : idx);
         });
       }
 
       window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll);
       setActive(0);
-      onScroll();
     })();
   </script>
 </section>
 
 <style>
   .anatomy { padding-bottom: 0; }
-  .anatomy-head { max-width: 60ch; }
+  .anatomy-head { max-width: 64ch; }
 
-  .anatomy-scroll { position: relative; height: 380vh; }
+  .anatomy-step-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+  }
+
+  .step-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition: all var(--dur-fast) ease;
+  }
+
+  .step-nav-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+  }
+
+  .step-nav-btn.is-active {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 0 12px rgba(var(--page-glow), 0.5);
+  }
+
+  .anatomy-scroll { position: relative; height: 350vh; }
   .anatomy-stage {
     position: sticky;
     top: 0;
@@ -233,37 +271,32 @@ const steps = [
     align-items: center;
     overflow: hidden;
   }
+
   .stage-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-8);
     align-items: center;
-    width: min(1200px, 90vw);
+    width: min(1200px, 92vw);
   }
 
-  /* Diagrama */
   .stage-diagram {
     position: relative;
     aspect-ratio: 1 / 1;
     width: min(75vw, 340px);
     margin-inline: auto;
   }
-  .diagram-lines {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
+
+  .diagram-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
   .link {
     stroke: rgba(var(--page-glow), 0.2);
-    stroke-width: 1;
+    stroke-width: 1.5;
     stroke-dasharray: 90;
     stroke-dashoffset: 90;
     transition: stroke-dashoffset 0.6s var(--ease-editorial), stroke 0.4s ease;
   }
   .link.is-on {
-    stroke: rgba(var(--page-glow), 0.65);
+    stroke: var(--accent);
     stroke-dashoffset: 0;
   }
 
@@ -271,22 +304,16 @@ const steps = [
     position: absolute;
     left: 50%; top: 50%;
     transform: translate(-50%, -50%);
-    width: 82px; height: 82px;
+    width: 84px; height: 84px;
     display: grid; place-content: center; text-align: center;
     border-radius: 50%;
     background: var(--bg-surface-elevated);
-    border: 1px solid var(--border-medium);
+    border: 1px solid var(--accent);
     z-index: 3;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 0 20px rgba(var(--page-glow), 0.3);
   }
-  .core-ring {
-    position: absolute; inset: -8px;
-    border-radius: 50%;
-    border: 1px dashed rgba(var(--page-glow), 0.4);
-    animation: core-spin 10s linear infinite;
-  }
-  @keyframes core-spin { to { transform: rotate(360deg); } }
-  .core-label { font-size: var(--text-lg); color: var(--accent-2); font-weight: 500; }
+
+  .core-label { font-size: var(--text-lg); color: var(--text-primary); font-weight: 700; }
   .core-sub { font-size: 0.6rem; color: var(--text-muted); letter-spacing: 0.2em; }
 
   .diagram-node {
@@ -297,40 +324,28 @@ const steps = [
     background: var(--bg-surface-base);
     border: 1px solid var(--border-subtle);
     font-size: var(--text-xs); color: var(--text-muted);
-    white-space: nowrap;
     opacity: 0.35;
-    transition: opacity 0.5s ease, transform 0.5s var(--ease-editorial), color 0.3s ease, border-color 0.3s ease;
+    transition: all 0.4s var(--ease-editorial);
     z-index: 2;
   }
-  .node-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--text-muted);
-    transition: all 0.3s ease;
-  }
+
   .diagram-node.is-on {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-    color: var(--accent-2);
-    border-color: var(--border-medium);
+    color: var(--text-primary);
+    border-color: var(--accent);
+    box-shadow: 0 0 14px rgba(var(--page-glow), 0.3);
+  }
+
+  .node-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-muted);
   }
   .diagram-node.is-on .node-dot {
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(var(--page-glow), 0.8);
+    box-shadow: 0 0 8px var(--accent);
   }
 
-  .loop-badge {
-    position: absolute;
-    left: 50%; bottom: -2.2rem;
-    transform: translateX(-50%);
-    font-size: 0.6rem; letter-spacing: 0.16em;
-    color: var(--text-muted);
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  .stage-diagram[data-active="4"] .loop-badge { opacity: 0.85; }
-
-  /* Copia */
   .stage-copy { position: relative; }
   .step-track { position: relative; min-height: 180px; }
   .stage-step {
@@ -354,27 +369,17 @@ const steps = [
   .trace-dot {
     width: 6px; height: 6px; border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(var(--page-glow), 0.8);
+    box-shadow: 0 0 8px var(--accent);
   }
   .trace-log { display: grid; gap: 0.25rem; font-size: var(--text-xs); min-height: 5em; }
   .trace-line { color: var(--text-secondary); }
   .trace-line.is-new { color: var(--accent-2); }
-
-  .step-progress { display: flex; gap: 0.4rem; margin-top: var(--space-4); }
-  .prog-tick {
-    height: 3px; flex: 1; border-radius: var(--radius-full);
-    background: var(--bg-surface-recessed);
-    overflow: hidden; position: relative;
-    transition: background 0.35s ease;
-  }
-  .prog-tick.is-on { background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
 
   @media (min-width: 880px) {
     .stage-grid { grid-template-columns: 0.95fr 1.05fr; gap: var(--space-12); }
     .stage-diagram { width: min(38vw, 380px); }
   }
 
-  /* Adaptación en pantallas reducidas / móviles / prefers-reduced-motion */
   .anatomy.reduced .anatomy-scroll { height: auto; }
   .anatomy.reduced .anatomy-stage { position: static; height: auto; padding-block: var(--space-8); }
   .anatomy.reduced .step-track { min-height: 0; display: grid; gap: var(--space-6); }

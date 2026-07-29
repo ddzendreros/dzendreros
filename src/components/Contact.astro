@@ -9,15 +9,17 @@ const year = new Date().getFullYear();
   <div class="shell">
     <div class="contact-card card reveal">
       <p class="kicker"><T es={ui.contact_kicker.es} en={ui.contact_kicker.en} /></p>
-      <h2 class="contact-title"><T es={ui.contact_title.es} en={ui.contact_title.en} /></h2>
+      <h2 class="contact-title font-display"><T es={ui.contact_title.es} en={ui.contact_title.en} /></h2>
       <p class="section-lead" style="margin-inline:auto;"><T es={ui.contact_lead.es} en={ui.contact_lead.en} /></p>
 
-      <a class="contact-mail font-display" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <button id="copy-mail-btn" class="contact-mail font-display" type="button" title="Haz clic para copiar correo">
+        {profile.email}
+      </button>
 
       <div class="contact-links">
-        <a class="btn btn-primary" href={`mailto:${profile.email}`}>
+        <button id="copy-mail-action" class="btn btn-primary" type="button">
           <T es={ui.email_label.es} en={ui.email_label.en} /> <span aria-hidden="true">→</span>
-        </a>
+        </button>
         <a class="btn" href={profile.links.linkedin} target="_blank" rel="noopener">LinkedIn</a>
         <a class="btn" href={profile.links.github} target="_blank" rel="noopener">GitHub</a>
         <a class="btn" href={profile.links.instagram} target="_blank" rel="noopener">Instagram</a>
@@ -33,6 +35,28 @@ const year = new Date().getFullYear();
   </footer>
 </section>
 
+<script is:inline define:vars={{ userEmail: profile.email }}>
+  (function () {
+    const btnText = document.getElementById("copy-mail-btn");
+    const btnAction = document.getElementById("copy-mail-action");
+    const toast = document.getElementById("global-toast");
+
+    function copyEmail() {
+      navigator.clipboard.writeText(userEmail).then(() => {
+        if (toast) {
+          toast.classList.add("is-show");
+          setTimeout(() => { toast.classList.remove("is-show"); }, 2800);
+        }
+      }).catch(() => {
+        window.location.href = "mailto:" + userEmail;
+      });
+    }
+
+    if (btnText) btnText.addEventListener("click", copyEmail);
+    if (btnAction) btnAction.addEventListener("click", copyEmail);
+  })();
+</script>
+
 <style>
   .contact-card { 
     text-align: center; 
@@ -45,10 +69,10 @@ const year = new Date().getFullYear();
   }
   
   .contact-title {
-    font-family: var(--font-display);
     font-size: var(--text-3xl);
+    font-weight: 700;
     margin-top: var(--space-4);
-    line-height: 1.12;
+    line-height: 1.08;
     max-width: 20ch;
   }
   
@@ -57,12 +81,15 @@ const year = new Date().getFullYear();
     margin-top: var(--space-8); 
     font-size: clamp(1.2rem, 0.9rem + 2vw, 2.2rem);
     color: var(--accent-2); 
-    border-bottom: 1px dashed transparent; 
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed var(--accent); 
+    cursor: pointer;
     transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
   }
   .contact-mail:hover {
     color: var(--text-primary);
-    border-color: var(--accent);
+    border-color: #ffffff;
   }
   
   .contact-links {

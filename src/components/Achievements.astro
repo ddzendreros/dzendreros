@@ -9,7 +9,7 @@ const base = import.meta.env.BASE_URL;
   <div class="shell">
     <div class="ach-head">
       <p class="kicker reveal"><T es={ui.achievements_kicker.es} en={ui.achievements_kicker.en} /></p>
-      <h2 class="section-title reveal" data-delay="1"><T es={ui.achievements_title.es} en={ui.achievements_title.en} /></h2>
+      <h2 class="section-title font-display reveal" data-delay="1"><T es={ui.achievements_title.es} en={ui.achievements_title.en} /></h2>
       <p class="section-lead reveal" data-delay="2"><T es={ui.achievements_lead.es} en={ui.achievements_lead.en} /></p>
     </div>
 
@@ -18,21 +18,23 @@ const base = import.meta.env.BASE_URL;
         <article class="ach card reveal" data-palette={a.palette}>
           <div class={`ach-gallery ${a.images.length === 1 ? "is-single" : ""}`}>
             {a.images.map((img, i) => (
-              <img
-                class={`ach-img ${i === 0 ? "is-main" : ""}`}
-                src={`${base}images/${img.src}`}
-                alt={img.alt.es}
-                loading="lazy"
-                width="600" height="400"
-              />
+              <button class="img-modal-trigger" type="button" data-img-src={`${base}images/${img.src}`} data-img-alt={img.alt.es}>
+                <img
+                  class={`ach-img ${i === 0 ? "is-main" : ""}`}
+                  src={`${base}images/${img.src}`}
+                  alt={img.alt.es}
+                  loading="lazy"
+                  width="600" height="400"
+                />
+              </button>
             ))}
           </div>
 
           <div class="ach-body">
             <div class="ach-award">
-              <span class="chip award-badge">🏆 <T es={a.award.es} en={a.award.en} /></span>
+              <span class="chip award-badge font-mono">🏆 <T es={a.award.es} en={a.award.en} /></span>
             </div>
-            <h3 class="ach-name">{a.name}</h3>
+            <h3 class="ach-name font-display">{a.name}</h3>
             <p class="ach-subtitle"><T es={a.subtitle.es} en={a.subtitle.en} /></p>
             <p class="ach-org font-mono">
               <T es={a.org.es} en={a.org.en} /> · <T es={a.date.es} en={a.date.en} />
@@ -63,10 +65,47 @@ const base = import.meta.env.BASE_URL;
       ))}
     </div>
   </div>
+
+  <!-- Lightbox Modal de Imágenes -->
+  <dialog id="image-lightbox" class="lightbox-dialog" aria-label="Visualizador de imágenes">
+    <div class="lightbox-content">
+      <button id="close-lightbox" class="close-lightbox-btn" type="button" aria-label="Cerrar imagen">✕</button>
+      <img id="lightbox-img" src="" alt="" />
+      <p id="lightbox-caption" class="lightbox-caption font-mono"></p>
+    </div>
+  </dialog>
 </section>
 
+<script is:inline>
+  (function () {
+    const triggers = document.querySelectorAll("[data-img-src]");
+    const dialog = document.getElementById("image-lightbox");
+    const img = document.getElementById("lightbox-img");
+    const caption = document.getElementById("lightbox-caption");
+    const closeBtn = document.getElementById("close-lightbox");
+
+    if (dialog && img && closeBtn) {
+      triggers.forEach((trigger) => {
+        trigger.addEventListener("click", () => {
+          const src = trigger.getAttribute("data-img-src");
+          const alt = trigger.getAttribute("data-img-alt");
+          img.src = src || "";
+          img.alt = alt || "";
+          if (caption) caption.textContent = alt || "";
+          dialog.showModal();
+        });
+      });
+
+      closeBtn.addEventListener("click", () => dialog.close());
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+    }
+  })();
+</script>
+
 <style>
-  .ach-head { max-width: 58ch; margin-bottom: var(--space-12); }
+  .ach-head { max-width: 60ch; margin-bottom: var(--space-12); }
   .ach-list { display: grid; gap: var(--space-12); }
   .ach { display: grid; grid-template-columns: 1fr; overflow: hidden; }
 
@@ -75,8 +114,18 @@ const base = import.meta.env.BASE_URL;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 4px;
-    min-height: 240px;
+    min-height: 250px;
     background: var(--bg-surface-recessed);
+  }
+
+  .img-modal-trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: zoom-in;
+    width: 100%;
+    height: 100%;
   }
 
   .ach-img {
@@ -84,10 +133,10 @@ const base = import.meta.env.BASE_URL;
     height: 100%;
     object-fit: cover;
     filter: saturate(0.95);
-    transition: transform var(--dur-base) ease, filter var(--dur-base) ease;
+    transition: transform var(--dur-fast) ease, filter var(--dur-fast) ease;
   }
   .ach-img.is-main { grid-row: 1 / span 2; }
-  .ach:hover .ach-img { filter: saturate(1.02); }
+  .img-modal-trigger:hover .ach-img { filter: saturate(1.05); transform: scale(1.02); }
 
   .ach-gallery.is-single {
     display: flex;
@@ -110,7 +159,7 @@ const base = import.meta.env.BASE_URL;
     font-weight: 500;
   }
 
-  .ach-name { font-size: var(--text-2xl); }
+  .ach-name { font-size: var(--text-2xl); font-weight: 700; }
   .ach-subtitle { color: var(--text-secondary); font-size: var(--text-base); }
   .ach-org { font-size: var(--text-xs); color: var(--accent-2); letter-spacing: 0.02em; }
   .ach-desc { color: var(--text-secondary); margin-top: var(--space-2); font-size: var(--text-base); }
@@ -121,6 +170,57 @@ const base = import.meta.env.BASE_URL;
   .ach-body .chips { margin-top: var(--space-4); display: flex; flex-wrap: wrap; gap: 0.5rem; }
   .proj-label { display: block; font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-2); }
   .ach-repo { margin-top: var(--space-4); align-self: flex-start; }
+
+  /* Dialog Lightbox */
+  .lightbox-dialog {
+    border: none;
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface-elevated);
+    color: var(--text-primary);
+    padding: var(--space-6);
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0,0,0,0.8);
+    margin: auto;
+  }
+
+  .lightbox-dialog::backdrop {
+    background: rgba(5, 7, 14, 0.85);
+    backdrop-filter: blur(8px);
+  }
+
+  .lightbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    position: relative;
+  }
+
+  .close-lightbox-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--bg-obsidian);
+    border: 1px solid var(--border-medium);
+    color: var(--text-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+  }
+
+  .lightbox-caption {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
 
   @media (min-width: 900px) {
     .ach { grid-template-columns: 0.95fr 1.05fr; }

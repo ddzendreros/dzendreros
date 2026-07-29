@@ -8,7 +8,7 @@ import T from "./T.astro";
   <div class="shell">
     <div class="exp-head">
       <p class="kicker reveal"><T es={ui.experience_kicker.es} en={ui.experience_kicker.en} /></p>
-      <h2 class="section-title reveal" data-delay="1"><T es={ui.experience_title.es} en={ui.experience_title.en} /></h2>
+      <h2 class="section-title font-display reveal" data-delay="1"><T es={ui.experience_title.es} en={ui.experience_title.en} /></h2>
     </div>
 
     <div class="exp-grid">
@@ -21,7 +21,7 @@ import T from "./T.astro";
             </div>
             <div class="job-body">
               <div class="job-top">
-                <h3 class="job-role"><T es={job.role.es} en={job.role.en} /></h3>
+                <h3 class="job-role font-display"><T es={job.role.es} en={job.role.en} /></h3>
                 <span class="job-period font-mono"><T es={job.period.es} en={job.period.en} /></span>
               </div>
               <p class="job-company">{job.company} · <span class="job-loc"><T es={job.location.es} en={job.location.en} /></span></p>
@@ -43,7 +43,7 @@ import T from "./T.astro";
           <ul class="edu-list">
             {education.map((e) => (
               <li class="edu-item">
-                <strong><T es={e.degree.es} en={e.degree.en} /></strong>
+                <strong class="font-display"><T es={e.degree.es} en={e.degree.en} /></strong>
                 <span class="edu-school">{e.school}</span>
                 <span class="edu-period font-mono"><T es={e.period.es} en={e.period.en} /></span>
               </li>
@@ -58,7 +58,7 @@ import T from "./T.astro";
             {skills.map((g) => (
               <div class="skill-group">
                 <span class="skill-name font-mono"><T es={g.group.es} en={g.group.en} /></span>
-                <div class="chips">{g.items.map((it) => <span class="chip">{it}</span>)}</div>
+                <div class="chips">{g.items.map((it) => <span class="chip" data-skill-item={it}>{it}</span>)}</div>
               </div>
             ))}
           </div>
@@ -91,13 +91,13 @@ import T from "./T.astro";
     height: 12px; 
     border-radius: 50%; 
     background: var(--accent); 
-    box-shadow: 0 0 8px rgba(var(--glow), 0.6);
+    box-shadow: 0 0 8px var(--accent);
     margin-top: 6px; 
     z-index: 2;
   }
 
   .job-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; justify-content: space-between; }
-  .job-role { font-size: var(--text-lg); font-weight: 500; }
+  .job-role { font-size: var(--text-lg); font-weight: 600; }
   .job-period { font-size: var(--text-xs); color: var(--accent-2); }
   .job-company { color: var(--text-secondary); margin-top: 0.25rem; font-size: var(--text-sm); }
   .job-loc { color: var(--text-muted); }
@@ -120,7 +120,7 @@ import T from "./T.astro";
     border-bottom: none;
     padding-bottom: 0;
   }
-  .edu-list strong { font-weight: 500; font-size: var(--text-base); }
+  .edu-list strong { font-weight: 600; font-size: var(--text-base); }
   .edu-school { color: var(--text-secondary); font-size: var(--text-sm); }
   .edu-period { color: var(--text-muted); font-size: var(--text-xs); }
 

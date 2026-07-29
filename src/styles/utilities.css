@@ -1,6 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════════
-   UTILITIES & ACCESSIBILITY HELPER CLASSES
-   Obsidian Editorial Engineering
+   UTILITIES & TYPOGRAPHY CLASSES · Cyber Obsidian UX/UI
    ════════════════════════════════════════════════════════════════════════ */
 
 .font-display { font-family: var(--font-display); }
@@ -10,11 +9,9 @@
 .text-balance { text-wrap: balance; }
 .text-pretty  { text-wrap: pretty; }
 
-/* Visibilidad de idioma para SSR / hydration */
 html[data-lang="es"] :where([data-lang-en]) { display: none !important; }
 html[data-lang="en"] :where([data-lang-es]) { display: none !important; }
 
-/* Accesibilidad lectores de pantalla */
 .sr-only {
   position: absolute;
   width: 1px;

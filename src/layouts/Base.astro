@@ -24,7 +24,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
-    <meta name="theme-color" content="#07080d" />
+    <meta name="theme-color" content="#05070e" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -33,15 +33,15 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Tipografía Google Fonts -->
+    <!-- Tipografías: Space Grotesk + Inter + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Fijar idioma antes del primer renderizado para evitar parpadeo -->
+    <!-- Fijar idioma antes del primer paint -->
     <script is:inline>
       (function () {
         try {
@@ -56,16 +56,22 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     </script>
   </head>
   <body>
-    <!-- Riel de progreso: el recorrido como pipeline de inferencia -->
+    <!-- Riel de progreso de scroll / pipeline agéntico -->
     <div class="scroll-rail" aria-hidden="true">
       <span class="scroll-rail__label">inference&nbsp;·&nbsp;scroll</span>
       <div class="scroll-rail__fill"></div>
       <div class="scroll-rail__head"></div>
     </div>
 
+    <!-- Notificación Toast global para acciones (copia de email, etc.) -->
+    <div id="global-toast" class="toast-notification" aria-live="polite" aria-atomic="true">
+      <span class="toast-icon">📋</span>
+      <span class="toast-text">¡Correo copiado al portapapeles!</span>
+    </div>
+
     <slot />
 
-    <!-- ── Paleta dinámica: acento muta según sección visible ── -->
+    <!-- ── Paleta dinámica por sección ── -->
     <script is:inline>
       (function () {
         const root = document.documentElement;
@@ -179,36 +185,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
         decodeHeadlines(300);
         document.addEventListener("langchange", () => decodeHeadlines(60));
 
-        /* Count-up de métricas */
-        function countUp(el) {
-          const raw = el.textContent.trim();
-          const m = raw.match(/^(\d+)(.*)$/);
-          if (!m) return;
-          const end = parseInt(m[1], 10);
-          const suffix = m[2] || "";
-          if (reduce) { el.textContent = raw; return; }
-          const dur = 1200;
-          const start = performance.now();
-          function tick(now) {
-            const p = Math.min(1, (now - start) / dur);
-            const eased = 1 - Math.pow(1 - p, 3);
-            el.textContent = Math.round(end * eased) + suffix;
-            if (p < 1) requestAnimationFrame(tick);
-            else el.textContent = raw;
-          }
-          requestAnimationFrame(tick);
-        }
-        const metrics = document.querySelectorAll(".metric");
-        if (metrics.length) {
-          const mo = new IntersectionObserver((entries, obs) => {
-            entries.forEach((e) => {
-              if (e.isIntersecting) { countUp(e.target); obs.unobserve(e.target); }
-            });
-          }, { threshold: 0.5 });
-          metrics.forEach((m) => mo.observe(m));
-        }
-
-        /* Spotlight en tarjeta */
+        /* Spotlight en tarjetas */
         document.addEventListener("pointermove", (e) => {
           const card = e.target.closest && e.target.closest(".card");
           if (!card) return;

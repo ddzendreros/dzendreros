@@ -1,20 +1,20 @@
 /* ════════════════════════════════════════════════════════════════════════
-   LAYOUT ENGINE & EDITORIAL SPACING
-   Obsidian Editorial Engineering
+   LAYOUT ENGINE & BENTO GRID SYSTEM
+   Cyber Obsidian UX/UI
    ════════════════════════════════════════════════════════════════════════ */
 
 .shell {
-  width: min(1200px, 90vw);
+  width: min(1200px, 92vw);
   margin-inline: auto;
 }
 
 .shell-wide {
-  width: min(1360px, 94vw);
+  width: min(1340px, 94vw);
   margin-inline: auto;
 }
 
 .shell-narrow {
-  width: min(860px, 88vw);
+  width: min(840px, 88vw);
   margin-inline: auto;
 }
 
@@ -23,14 +23,14 @@
   position: relative;
 }
 
-/* Encabezados Editoriales */
+/* Encabezados de Sección de Alto Impacto */
 .kicker {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent-2);
   font-weight: 500;
@@ -38,19 +38,20 @@
 
 .kicker::before {
   content: "";
-  width: 1.5rem;
-  height: 1px;
-  background: linear-gradient(90deg, var(--accent), transparent);
+  width: 1.2rem;
+  height: 2px;
+  background: var(--accent);
+  border-radius: var(--radius-full);
 }
 
 .section-title {
   font-family: var(--font-display);
   font-size: var(--text-3xl);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.015em;
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-top: var(--space-4);
+  margin-top: var(--space-3);
   max-width: 22ch;
 }
 
@@ -62,7 +63,25 @@
   line-height: 1.6;
 }
 
-/* Divisores de Sección Sobrios */
+/* Bento Grid System */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-6);
+}
+
+.bento-col-12 { grid-column: span 12; }
+.bento-col-8  { grid-column: span 12; }
+.bento-col-6  { grid-column: span 12; }
+.bento-col-4  { grid-column: span 12; }
+
+@media (min-width: 768px) {
+  .bento-col-8 { grid-column: span 8; }
+  .bento-col-6 { grid-column: span 6; }
+  .bento-col-4 { grid-column: span 4; }
+}
+
+/* Divisor Neón Sobrio */
 .divider {
   height: 1px;
   background: linear-gradient(

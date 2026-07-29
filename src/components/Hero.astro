@@ -11,45 +11,53 @@ import NeuralField from "./NeuralField.astro";
 
   <div class="shell hero-grid">
     <div class="hero-copy">
-      <div class="hero-header-block reveal">
-        <p class="kicker">
-          <T es={profile.role.es} en={profile.role.en} />
-        </p>
-
-        <h1 class="hero-title" data-decode>
-          <T es={profile.headline.es} en={profile.headline.en} />
-        </h1>
+      <!-- Status Badge -->
+      <div class="hero-status reveal">
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          <T es="Disponible para Proyectos & Agentes de IA" en="Available for AI & Agentic Systems" />
+        </span>
       </div>
 
-      <p class="hero-intro section-lead reveal" data-delay="1">
+      <h1 class="hero-title font-display reveal" data-delay="1" data-decode>
+        <T es={profile.headline.es} en={profile.headline.en} />
+      </h1>
+
+      <p class="hero-intro section-lead reveal" data-delay="2">
         <T es={profile.intro.es} en={profile.intro.en} />
       </p>
 
-      <div class="hero-actions reveal" data-delay="2">
+      <div class="hero-actions reveal" data-delay="3">
         <a class="btn btn-primary" href="#projects">
           <T es={ui.cta_projects.es} en={ui.cta_projects.en} />
           <span aria-hidden="true">→</span>
         </a>
-        <a class="btn btn-ghost" href={`mailto:${profile.email}`}>
-          <T es={ui.cta_contact.es} en={ui.cta_contact.en} />
+        <a class="btn btn-ghost" href="#anatomy">
+          <T es="Ver Arquitectura" en="Explore Architecture" />
         </a>
       </div>
 
-      <div class="hero-meta reveal font-mono" data-delay="3">
-        <span class="meta-item">📍 <T es={profile.location.es} en={profile.location.en} /></span>
-        <span class="meta-sep" aria-hidden="true">·</span>
-        <a class="meta-item link-underline" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <!-- Quick Metrics Bento Strip -->
+      <div class="hero-metrics-strip reveal" data-delay="3">
+        <div class="hero-metric-item">
+          <span class="metric">95%</span>
+          <span class="metric-desc font-mono"><T es="Tiempos operacionales recortados" en="Operational time cut" /></span>
+        </div>
+        <div class="hero-metric-item">
+          <span class="metric">100%</span>
+          <span class="metric-desc font-mono"><T es="Inferencia agéntica local" en="Local agentic inference" /></span>
+        </div>
+        <div class="hero-metric-item">
+          <span class="metric">Top 3</span>
+          <span class="metric-desc font-mono"><T es="Talent Land IBM Track 2026" en="Talent Land IBM Track 2026" /></span>
+        </div>
       </div>
     </div>
 
+    <!-- Terminal Interactiva -->
     <div class="hero-terminal-container reveal" data-delay="2">
       <Terminal />
     </div>
-  </div>
-
-  <div class="scroll-hint font-mono" aria-hidden="true">
-    <T es={ui.scroll.es} en={ui.scroll.en} />
-    <span class="scroll-line"></span>
   </div>
 </section>
 
@@ -58,7 +66,7 @@ import NeuralField from "./NeuralField.astro";
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: calc(56px + var(--space-8));
+    padding-top: calc(52px + var(--space-12));
     padding-bottom: var(--space-12);
     position: relative;
     overflow: hidden;
@@ -78,81 +86,61 @@ import NeuralField from "./NeuralField.astro";
     flex-direction: column;
   }
 
+  .hero-status {
+    margin-bottom: var(--space-4);
+  }
+
   .hero-title {
-    font-family: var(--font-display);
     font-size: var(--text-hero);
-    line-height: 1.04;
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    margin-top: var(--space-3);
+    line-height: 1.02;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     color: var(--text-primary);
+    margin-top: var(--space-2);
   }
 
   .hero-intro {
-    margin-top: var(--space-6);
-    max-width: 52ch;
+    margin-top: var(--space-4);
+    max-width: 54ch;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-4);
-    margin-top: var(--space-8);
+    margin-top: var(--space-6);
   }
 
-  .hero-meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
+  .hero-metrics-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
     margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .hero-metric-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .metric-desc {
     font-size: var(--text-xs);
     color: var(--text-muted);
-  }
-
-  .meta-sep {
-    color: var(--text-dim);
   }
 
   .hero-terminal-container {
     position: relative;
     width: 100%;
-    max-width: 560px;
+    max-width: 580px;
     margin-inline: auto;
   }
 
-  .scroll-hint {
-    position: absolute;
-    left: 50%;
-    bottom: var(--space-4);
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-xs);
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    user-select: none;
-    z-index: 2;
-  }
-
-  .scroll-line {
-    width: 1px;
-    height: 32px;
-    background: linear-gradient(180deg, var(--accent), transparent);
-    animation: scroll-bounce 2.2s infinite ease-in-out;
-  }
-
-  @keyframes scroll-bounce {
-    0%, 100% { transform: translateY(0); opacity: 0.3; }
-    50% { transform: translateY(6px); opacity: 1; }
-  }
-
-  @media (min-width: 960px) {
+  @media (min-width: 980px) {
     .hero-grid {
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap: var(--space-12);
     }
     .hero-terminal-container {
@@ -161,7 +149,10 @@ import NeuralField from "./NeuralField.astro";
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-line { animation: none; opacity: 0.5; }
+  @media (max-width: 640px) {
+    .hero-metrics-strip {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
   }
 </style>

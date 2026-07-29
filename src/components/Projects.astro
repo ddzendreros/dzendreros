@@ -8,40 +8,43 @@ import T from "./T.astro";
   <div class="shell">
     <div class="proj-head">
       <p class="kicker reveal"><T es={ui.projects_kicker.es} en={ui.projects_kicker.en} /></p>
-      <h2 class="section-title reveal" data-delay="1"><T es={ui.projects_title.es} en={ui.projects_title.en} /></h2>
+      <h2 class="section-title font-display reveal" data-delay="1"><T es={ui.projects_title.es} en={ui.projects_title.en} /></h2>
       <p class="section-lead reveal" data-delay="2"><T es={ui.projects_lead.es} en={ui.projects_lead.en} /></p>
     </div>
 
     <div class="proj-list">
       {projects.map((p, i) => (
-        <article class="proj card reveal" data-palette={p.palette} data-delay={(i % 2) + 1}>
+        <article class="proj card reveal" data-palette={p.palette} data-delay={(i % 2) + 1} id={`proj-${p.id}`}>
           <!-- Cabecera de Proyecto -->
           <div class="proj-top">
             <div>
               <span class="proj-meta font-mono"><T es={p.meta.es} en={p.meta.en} /></span>
-              <h3 class="proj-name">{p.name}</h3>
+              <h3 class="proj-name font-display">{p.name}</h3>
               <p class="proj-tagline"><T es={p.tagline.es} en={p.tagline.en} /></p>
             </div>
             <span class="proj-index font-mono" aria-hidden="true">0{i + 1}</span>
           </div>
 
-          <!-- Flujo de Grafo LangGraph -->
+          <!-- Flujo Interactivo de Grafo LangGraph -->
           {p.id === "argos" && (
             <div class="langgraph-flow reveal" data-delay="2">
               <div class="flow-title font-mono">
                 <span class="pulse-dot"></span>
-                <span>LANGGRAPH FLOWSTATE PIPELINE</span>
+                <span>LANGGRAPH INTERACTIVE PIPELINE (HAZ CLIC EN CADA NODO)</span>
               </div>
-              <div class="flow-nodes font-mono">
-                <span class="node">Classifier</span>
+              <div class="flow-nodes font-mono" data-interactive-graph="argos">
+                <button class="node-btn active" type="button" data-node-info="Clasificación de intención académica con LLM local Ollama.">Classifier</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">Decompose</span>
+                <button class="node-btn" type="button" data-node-info="Descomposición de la consulta en 3 subpreguntas en paralelo.">Decompose</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">Search</span>
+                <button class="node-btn" type="button" data-node-info="Búsqueda concurrente en Semantic Scholar API & arXiv.">Search</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">Validate</span>
+                <button class="node-btn" type="button" data-node-info="Filtro duro de confiabilidad (Metadata completa + Peer-review).">Validate</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">Synthesis</span>
+                <button class="node-btn" type="button" data-node-info="Síntesis final de reporte estructurado en Markdown con citas.">Synthesis</button>
+              </div>
+              <div class="graph-inspector font-mono" id="inspector-argos">
+                ℹ️ <span class="inspector-text">Clasificación de intención académica con LLM local Ollama.</span>
               </div>
             </div>
           )}
@@ -50,18 +53,21 @@ import T from "./T.astro";
             <div class="langgraph-flow reveal" data-delay="2">
               <div class="flow-title font-mono">
                 <span class="pulse-dot"></span>
-                <span>MULTI-MODULE ORCHESTRATOR PATH</span>
+                <span>MULTI-MODULE ORCHESTRATOR PATH (HAZ CLIC EN CADA NODO)</span>
               </div>
-              <div class="flow-nodes font-mono">
-                <span class="node">Core</span>
+              <div class="flow-nodes font-mono" data-interactive-graph="aeterna">
+                <button class="node-btn active" type="button" data-node-info="Core Orchestrator en Ollama local corriendo en GPU RTX 5060.">Core</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">ChromaDB</span>
+                <button class="node-btn" type="button" data-node-info="Base vectorial ChromaDB para memoria de contexto de largo plazo.">ChromaDB</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">SQLite</span>
+                <button class="node-btn" type="button" data-node-info="Base de datos relacional SQLite para estado persistente de tareas.">SQLite</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">AlertEngine</span>
+                <button class="node-btn" type="button" data-node-info="Motor de alertas escalonadas en 4 niveles de severidad.">AlertEngine</button>
                 <span class="arrow" aria-hidden="true">→</span>
-                <span class="node">Telegram</span>
+                <button class="node-btn" type="button" data-node-info="Bot de Telegram para notificaciones y briefing matutino.">Telegram</button>
+              </div>
+              <div class="graph-inspector font-mono" id="inspector-aeterna">
+                ℹ️ <span class="inspector-text">Core Orchestrator en Ollama local corriendo en GPU RTX 5060.</span>
               </div>
             </div>
           )}
@@ -78,18 +84,18 @@ import T from "./T.astro";
             </div>
           </div>
 
-          <!-- Viñetas de Arquitectura & Resultados -->
+          <!-- Viñetas de Logros -->
           <ul class="proj-highlights">
             {p.highlights.map((h) => (
               <li><span class="hl-mark" aria-hidden="true">◆</span><T es={h.es} en={h.en} /></li>
             ))}
           </ul>
 
-          <!-- Stack Tecnológico -->
+          <!-- Stack de Tecnologías -->
           <div class="proj-stack">
             <span class="proj-label font-mono"><T es={ui.stack_label.es} en={ui.stack_label.en} /></span>
             <div class="chips">
-              {p.stack.map((s) => <span class="chip">{s}</span>)}
+              {p.stack.map((s) => <span class="chip" data-skill-tag={s}>{s}</span>)}
             </div>
           </div>
         </article>
@@ -98,42 +104,64 @@ import T from "./T.astro";
   </div>
 </section>
 
+<script is:inline>
+  (function () {
+    const graphs = document.querySelectorAll("[data-interactive-graph]");
+    graphs.forEach((graph) => {
+      const id = graph.getAttribute("data-interactive-graph");
+      const inspector = document.getElementById(`inspector-${id}`);
+      const textEl = inspector ? inspector.querySelector(".inspector-text") : null;
+      const btns = graph.querySelectorAll(".node-btn");
+
+      btns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          btns.forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          const info = btn.getAttribute("data-node-info");
+          if (textEl && info) {
+            textEl.textContent = info;
+          }
+        });
+      });
+    });
+  })();
+</script>
+
 <style>
-  .proj-head { max-width: 60ch; margin-bottom: var(--space-12); }
+  .proj-head { max-width: 62ch; margin-bottom: var(--space-12); }
   .proj-list { display: grid; gap: var(--space-12); }
   .proj { padding: clamp(1.6rem, 1.2rem + 2vw, 3rem); }
 
   .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); }
   .proj-meta { font-size: var(--text-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-2); }
-  .proj-name { font-size: var(--text-2xl); margin-top: var(--space-2); }
+  .proj-name { font-size: var(--text-2xl); font-weight: 700; margin-top: var(--space-2); }
   .proj-tagline { margin-top: var(--space-2); color: var(--text-secondary); max-width: 48ch; font-size: var(--text-base); }
   .proj-index { font-size: var(--text-2xl); color: rgba(var(--glow), 0.25); line-height: 1; user-select: none; }
 
-  /* Flujo de Estados LangGraph */
   .langgraph-flow {
     margin-block: var(--space-6) var(--space-4);
-    padding: var(--space-3) var(--space-4);
+    padding: var(--space-4);
     background: var(--bg-surface-recessed);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
   }
+
   .flow-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.62rem;
     color: var(--text-muted);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     margin-bottom: var(--space-3);
   }
+
   .pulse-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 8px rgba(var(--glow), 0.8);
-    display: inline-block;
+    box-shadow: 0 0 8px var(--accent);
   }
+
   .flow-nodes {
     display: flex;
     flex-wrap: wrap;
@@ -141,17 +169,39 @@ import T from "./T.astro";
     gap: 0.4rem 0.6rem;
     font-size: var(--text-xs);
   }
-  .node {
-    padding: 0.25rem 0.6rem;
+
+  .node-btn {
+    padding: 0.3rem 0.7rem;
     border-radius: var(--radius-sm);
     background: var(--bg-surface-base);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    cursor: pointer;
     transition: all var(--dur-fast) ease;
   }
-  .arrow {
-    color: var(--text-muted);
-    user-select: none;
+
+  .node-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+  }
+
+  .node-btn.active {
+    background: var(--accent);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 0 12px rgba(var(--glow), 0.5);
+  }
+
+  .arrow { color: var(--text-dim); }
+
+  .graph-inspector {
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px dashed var(--border-subtle);
+    font-size: var(--text-xs);
+    color: var(--accent-2);
   }
 
   .proj-bd { display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin-top: var(--space-6); }

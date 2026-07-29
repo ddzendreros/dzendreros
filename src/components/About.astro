@@ -6,70 +6,71 @@ const base = import.meta.env.BASE_URL;
 ---
 
 <section id="about" class="section" data-palette="iris">
-  <div class="shell about-grid">
-    <div class="about-content">
-      <div class="about-head">
-        <p class="kicker reveal"><T es={ui.about_kicker.es} en={ui.about_kicker.en} /></p>
-        <h2 class="section-title reveal" data-delay="1">
-          <T es={ui.about_title.es} en={ui.about_title.en} />
-        </h2>
+  <div class="shell">
+    <div class="about-head">
+      <p class="kicker reveal"><T es={ui.about_kicker.es} en={ui.about_kicker.en} /></p>
+      <h2 class="section-title reveal" data-delay="1">
+        <T es={ui.about_title.es} en={ui.about_title.en} />
+      </h2>
+    </div>
+
+    <!-- Bento Layout de Sobre Mí -->
+    <div class="bento-grid about-bento">
+      <!-- Bio Narrative (Col 7) -->
+      <div class="bento-col-8 card about-narrative-card reveal">
+        <div class="about-paragraphs">
+          {about.paragraphs.map((p, i) => (
+            <p class="about-p">
+              <T es={p.es} en={p.en} />
+            </p>
+          ))}
+        </div>
       </div>
 
-      <div class="about-body">
-        {about.paragraphs.map((p, i) => (
-          <p class="about-p reveal" data-delay={i + 1}>
-            <T es={p.es} en={p.en} />
-          </p>
-        ))}
+      <!-- Portrait & Status (Col 4) -->
+      <div class="bento-col-4 card about-portrait-card reveal" data-delay="1">
+        <div class="portrait-container">
+          <img
+            src={`${base}images/diego-portrait.jpg`}
+            alt={profile.name}
+            width="400"
+            height="520"
+            loading="lazy"
+          />
+          <div class="portrait-badge font-mono">
+            <span class="status-dot"></span>
+            <T es="Hablemos de IA" en="Let's talk AI" />
+          </div>
+        </div>
       </div>
 
-      <div class="about-facts">
+      <!-- Metrics Bento Strip (Col 12) -->
+      <div class="bento-col-12 metrics-bento-strip">
         {about.facts.map((f, i) => (
-          <div class="fact-block card reveal" data-delay={i + 1}>
+          <div class="card metric-card reveal" data-delay={(i % 2) + 1}>
             <span class="metric">{f.value}</span>
             <span class="fact-label font-mono"><T es={f.label.es} en={f.label.en} /></span>
           </div>
         ))}
       </div>
     </div>
-
-    <div class="about-portrait-wrap reveal" data-delay="2">
-      <div class="portrait-frame card">
-        <img
-          src={`${base}images/diego-portrait.jpg`}
-          alt={profile.name}
-          width="430"
-          height="560"
-          loading="lazy"
-        />
-        <div class="portrait-overlay" aria-hidden="true"></div>
-      </div>
-      <div class="portrait-badge font-mono">
-        <span class="pulse-dot"></span>
-        <T es="Hablemos de IA" en="Let's talk AI" />
-      </div>
-    </div>
   </div>
 </section>
 
 <style>
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-12);
-    align-items: flex-start;
-  }
+  .about-head { max-width: 62ch; margin-bottom: var(--space-8); }
+  .about-bento { gap: var(--space-6); }
 
-  .about-content {
+  .about-narrative-card {
+    padding: clamp(1.6rem, 1.2rem + 2vw, 3rem);
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 
-  .about-body {
+  .about-paragraphs {
     display: grid;
     gap: var(--space-4);
-    max-width: 64ch;
-    margin-top: var(--space-6);
   }
 
   .about-p {
@@ -78,92 +79,77 @@ const base = import.meta.env.BASE_URL;
     line-height: 1.7;
   }
 
-  .about-facts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-4);
-    margin-top: var(--space-8);
+  .about-portrait-card {
+    padding: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .fact-block {
+  .portrait-container {
+    position: relative;
+    width: 100%;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .portrait-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    filter: saturate(0.95);
+  }
+
+  .portrait-badge {
+    position: absolute;
+    bottom: var(--space-3);
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(10, 13, 24, 0.88);
+    border: 1px solid var(--border-medium);
+    backdrop-filter: blur(8px);
+    font-size: var(--text-xs);
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .metrics-bento-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+
+  .metric-card {
+    padding: var(--space-6) var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    padding: var(--space-6) var(--space-4);
     align-items: center;
     text-align: center;
+    gap: 0.3rem;
   }
 
   .fact-label {
     font-size: var(--text-xs);
     color: var(--text-muted);
-    letter-spacing: 0.02em;
-    max-width: 22ch;
+    max-width: 20ch;
   }
 
-  .about-portrait-wrap {
-    position: relative;
-    justify-self: center;
-    max-width: 340px;
-    width: 100%;
-    margin-top: var(--space-6);
-  }
-
-  .portrait-frame {
-    position: relative;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .portrait-frame img {
-    display: block;
-    width: 100%;
-    height: auto;
-    filter: saturate(0.95) contrast(1.02);
-  }
-
-  .portrait-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 65%, rgba(7, 8, 13, 0.7));
-    pointer-events: none;
-  }
-
-  .portrait-badge {
-    position: absolute;
-    left: 50%;
-    bottom: -18px;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    white-space: nowrap;
-    padding: 0.45rem 0.95rem;
-    border-radius: var(--radius-full);
-    font-size: var(--text-xs);
-    background: rgba(12, 14, 23, 0.9);
-    border: 1px solid var(--border-medium);
-    backdrop-filter: blur(8px);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .pulse-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 8px rgba(74, 222, 128, 0.7);
-  }
-
-  @media (min-width: 900px) {
-    .about-grid {
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: var(--space-12);
+  @media (max-width: 900px) {
+    .metrics-bento-strip {
+      grid-template-columns: repeat(2, 1fr);
     }
-    .about-portrait-wrap {
-      justify-self: end;
-      margin-top: 0;
+  }
+
+  @media (max-width: 480px) {
+    .metrics-bento-strip {
+      grid-template-columns: 1fr;
     }
   }
 </style>
