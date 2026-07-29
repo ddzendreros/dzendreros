@@ -1,0 +1,93 @@
+/* ════════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS · Obsidian Editorial Engineering
+   Diego Zendreros — AI Engineer & Autonomous Agent Builder
+   ════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Lienzo Base (Obsidiana Profundo & Superficies Editoriales) ───────── */
+  --bg-obsidian: #07080d;
+  --bg-surface-base: #0c0e17;
+  --bg-surface-elevated: #111422;
+  --bg-surface-recessed: #090a12;
+  
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  
+  /* ── Jerarquía Tipográfica de Contraste (WCAG AAA) ───────────────────── */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #8b98a9;
+  --text-dim: #64748b;
+  
+  /* ── Acento Global Predeterminado (Iris · Morado / Azul Firma) ────────── */
+  --accent: #7c83ff;
+  --accent-2: #c4b8ff;
+  --accent-ink: #06081a;
+  --glow: 124, 131, 255;
+  
+  --page-accent: var(--accent);
+  --page-glow: var(--glow);
+  
+  /* ── Tipografía & Fuentes ────────────────────────────────────────────── */
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Proporciones de Texto Fluido */
+  --text-xs: clamp(0.7rem, 0.66rem + 0.2vw, 0.78rem);
+  --text-sm: clamp(0.82rem, 0.78rem + 0.2vw, 0.88rem);
+  --text-base: clamp(0.98rem, 0.94rem + 0.25vw, 1.08rem);
+  --text-lg: clamp(1.12rem, 1.05rem + 0.35vw, 1.28rem);
+  --text-xl: clamp(1.4rem, 1.25rem + 0.75vw, 1.85rem);
+  --text-2xl: clamp(1.85rem, 1.5rem + 1.6vw, 2.75rem);
+  --text-3xl: clamp(2.4rem, 1.7rem + 3.2vw, 4.2rem);
+  --text-hero: clamp(2.8rem, 1.8rem + 4.8vw, 5.2rem);
+
+  /* ── Espaciado Editorial ─────────────────────────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  --section-padding-y: clamp(4.5rem, 3.2rem + 6.5vw, 8.5rem);
+
+  /* ── Sombras & Profundidad Discreta ──────────────────────────────────── */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 30px rgba(var(--page-glow), 0.12);
+
+  /* ── Radios de Borde ─────────────────────────────────────────────────── */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.85rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-full: 9999px;
+
+  /* ── Motion Tokens (Curvas de Easing Natural) ────────────────────────── */
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  --dur-fast: 0.18s;
+  --dur-base: 0.32s;
+  --dur-slow: 0.65s;
+  --dur-entrance: 0.85s;
+}
+
+/* ── Paletas por Sección (Variables HSL/RGB Sofisticadas) ───────────────── */
+[data-palette="iris"]     { --accent: #818cf8; --accent-2: #c7d2fe; --accent-ink: #06081a; --glow: 129, 140, 248; }
+[data-palette="argos"]    { --accent: #38bdf8; --accent-2: #bae6fd; --accent-ink: #02131e; --glow: 56, 189, 248; }
+[data-palette="aeterna"]  { --accent: #c084fc; --accent-2: #e9d5ff; --accent-ink: #130421; --glow: 192, 132, 252; }
+[data-palette="talent"]   { --accent: #4ade80; --accent-2: #bbf7d0; --accent-ink: #02160a; --glow: 74, 222, 128; }
+[data-palette="guardian"] { --accent: #2dd4bf; --accent-2: #99f6e4; --accent-ink: #011614; --glow: 45, 212, 191; }
+[data-palette="bob"]      { --accent: #60a5fa; --accent-2: #bfdbfe; --accent-ink: #040d1e; --glow: 96, 165, 250; }
+[data-palette="sice"]     { --accent: #a78bfa; --accent-2: #ddd6fe; --accent-ink: #0e051e; --glow: 167, 139, 250; }
+[data-palette="steel"]    { --accent: #94a3b8; --accent-2: #e2e8f0; --accent-ink: #0b0f17; --glow: 148, 163, 184; }

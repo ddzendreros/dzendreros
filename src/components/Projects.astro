@@ -15,7 +15,7 @@ import T from "./T.astro";
     <div class="proj-list">
       {projects.map((p, i) => (
         <article class="proj card reveal" data-palette={p.palette} data-delay={(i % 2) + 1}>
-          <!-- Cabecera de Tarjeta -->
+          <!-- Cabecera de Proyecto -->
           <div class="proj-top">
             <div>
               <span class="proj-meta font-mono"><T es={p.meta.es} en={p.meta.en} /></span>
@@ -25,22 +25,22 @@ import T from "./T.astro";
             <span class="proj-index font-mono" aria-hidden="true">0{i + 1}</span>
           </div>
 
-          <!-- Gráfico LangGraph Animado -->
+          <!-- Flujo de Grafo LangGraph -->
           {p.id === "argos" && (
             <div class="langgraph-flow reveal" data-delay="2">
               <div class="flow-title font-mono">
                 <span class="pulse-dot"></span>
-                <span>LANGGRAPH FLOWSTATE GRAPH</span>
+                <span>LANGGRAPH FLOWSTATE PIPELINE</span>
               </div>
               <div class="flow-nodes font-mono">
                 <span class="node">Classifier</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">Decompose</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">Search</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">Validate</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">Synthesis</span>
               </div>
             </div>
@@ -54,38 +54,38 @@ import T from "./T.astro";
               </div>
               <div class="flow-nodes font-mono">
                 <span class="node">Core</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">ChromaDB</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">SQLite</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">AlertEngine</span>
-                <span class="arrow">→</span>
+                <span class="arrow" aria-hidden="true">→</span>
                 <span class="node">Telegram</span>
               </div>
             </div>
           )}
 
-          <!-- Panel Recesivo: Problema vs Solución -->
+          <!-- Paneles Problema vs Solución -->
           <div class="proj-bd">
-            <div class="proj-block nm-recessed">
+            <div class="proj-block recessed-panel">
               <span class="proj-label font-mono"><T es={ui.problem_label.es} en={ui.problem_label.en} /></span>
               <p><T es={p.problem.es} en={p.problem.en} /></p>
             </div>
-            <div class="proj-block nm-recessed">
+            <div class="proj-block recessed-panel">
               <span class="proj-label font-mono"><T es={ui.solution_label.es} en={ui.solution_label.en} /></span>
               <p><T es={p.solution.es} en={p.solution.en} /></p>
             </div>
           </div>
 
-          <!-- Viñetas de Logros -->
+          <!-- Viñetas de Arquitectura & Resultados -->
           <ul class="proj-highlights">
             {p.highlights.map((h) => (
               <li><span class="hl-mark" aria-hidden="true">◆</span><T es={h.es} en={h.en} /></li>
             ))}
           </ul>
 
-          <!-- Stack de Tecnologías -->
+          <!-- Stack Tecnológico -->
           <div class="proj-stack">
             <span class="proj-label font-mono"><T es={ui.stack_label.es} en={ui.stack_label.en} /></span>
             <div class="chips">
@@ -99,111 +99,86 @@ import T from "./T.astro";
 </section>
 
 <style>
-  .proj-head { max-width: 60ch; margin-bottom: 3.2rem; }
-  .proj-list { display: grid; gap: 3rem; }
+  .proj-head { max-width: 60ch; margin-bottom: var(--space-12); }
+  .proj-list { display: grid; gap: var(--space-12); }
   .proj { padding: clamp(1.6rem, 1.2rem + 2vw, 3rem); }
 
-  .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; }
-  .proj-meta { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-2); }
-  .proj-name { font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.6rem); margin-top: 0.6rem; }
-  .proj-tagline { margin-top: 0.6rem; color: var(--text-soft); max-width: 48ch; font-size: 1.05rem; }
-  .proj-index { font-size: 2.6rem; color: rgba(var(--glow), 0.22); line-height: 1; user-select: none; }
+  .proj-top { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); }
+  .proj-meta { font-size: var(--text-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent-2); }
+  .proj-name { font-size: var(--text-2xl); margin-top: var(--space-2); }
+  .proj-tagline { margin-top: var(--space-2); color: var(--text-secondary); max-width: 48ch; font-size: var(--text-base); }
+  .proj-index { font-size: var(--text-2xl); color: rgba(var(--glow), 0.25); line-height: 1; user-select: none; }
 
   /* Flujo de Estados LangGraph */
   .langgraph-flow {
-    margin-block: 2.2rem 1.6rem;
-    padding: 1rem 1.2rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 0.8rem;
-    border: 1px solid rgba(255,255,255,0.02);
-    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5);
+    margin-block: var(--space-6) var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface-recessed);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
   }
   .flow-title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.62rem;
-    color: var(--text-dim);
+    color: var(--text-muted);
     letter-spacing: 0.18em;
-    margin-bottom: 0.8rem;
+    margin-bottom: var(--space-3);
   }
   .pulse-dot {
     width: 6px;
     height: 6px;
-    border-radius: 99px;
+    border-radius: 50%;
     background: var(--accent);
     box-shadow: 0 0 8px rgba(var(--glow), 0.8);
     display: inline-block;
-    animation: flow-dot-pulse 1.8s infinite ease-in-out;
   }
   .flow-nodes {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 0.6rem;
-    font-size: 0.74rem;
+    gap: 0.4rem 0.6rem;
+    font-size: var(--text-xs);
   }
   .node {
     padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-    background: var(--bg);
-    border: 1px solid rgba(255,255,255,0.01);
-    box-shadow: var(--nm-shadow-outset-sm);
-    color: var(--text-soft);
-    transition: all 0.3s ease;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface-base);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    transition: all var(--dur-fast) ease;
   }
   .arrow {
-    color: var(--text-dim);
+    color: var(--text-muted);
     user-select: none;
-    animation: arrow-flow 2.6s infinite ease-in-out;
-  }
-  /* Señal que recorre el grafo de izquierda a derecha (flujo de datos) */
-  .flow-nodes .arrow:nth-child(2) { animation-delay: 0s; }
-  .flow-nodes .arrow:nth-child(4) { animation-delay: 0.32s; }
-  .flow-nodes .arrow:nth-child(6) { animation-delay: 0.64s; }
-  .flow-nodes .arrow:nth-child(8) { animation-delay: 0.96s; }
-  @keyframes arrow-flow {
-    0%, 70%, 100% { color: var(--text-dim); text-shadow: none; transform: translateX(0); }
-    35% { color: var(--accent-2); text-shadow: 0 0 8px rgba(var(--glow), 0.7); transform: translateX(2px); }
   }
 
-  /* Animaciones de Nodos al Hover de la Tarjeta */
-  @keyframes node-pulse {
-    0%, 100% {
-      box-shadow: var(--nm-shadow-outset-sm);
-      color: var(--text-soft);
-      border-color: rgba(255,255,255,0.01);
-    }
-    50% {
-      box-shadow: var(--nm-shadow-inset-sm), 0 0 10px rgba(var(--glow), 0.15);
-      color: var(--accent-2);
-      border-color: rgba(var(--glow), 0.25);
-    }
+  .proj-bd { display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin-top: var(--space-6); }
+  .proj-label { display: block; font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-2); }
+  .proj-block p { color: var(--text-secondary); font-size: var(--text-base); }
+
+  .proj-highlights {
+    list-style: none;
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-subtle);
   }
-
-  .proj:hover .node:nth-child(1) { animation: node-pulse 2.2s infinite 0.1s; }
-  .proj:hover .node:nth-child(3) { animation: node-pulse 2.2s infinite 0.4s; }
-  .proj:hover .node:nth-child(5) { animation: node-pulse 2.2s infinite 0.7s; }
-  .proj:hover .node:nth-child(7) { animation: node-pulse 2.2s infinite 1.0s; }
-  .proj:hover .node:nth-child(9) { animation: node-pulse 2.2s infinite 1.3s; }
-
-  @keyframes flow-dot-pulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
+  .proj-highlights li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    color: var(--text-secondary);
+    font-size: var(--text-base);
   }
-
-  .proj-bd { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 1.6rem; }
-  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.6rem; }
-  .proj-block p { color: var(--text-soft); font-size: 0.96rem; }
-
-  .proj-highlights { list-style: none; display: grid; gap: 0.85rem; margin-top: 1.8rem; padding-top: 1.8rem; border-top: 1px solid var(--border); }
-  .proj-highlights li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.98rem; }
   .hl-mark { color: var(--accent); font-size: 0.7rem; line-height: 1.7; }
 
-  .proj-stack { margin-top: 1.8rem; }
+  .proj-stack { margin-top: var(--space-6); }
   .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
   @media (min-width: 760px) {
-    .proj-bd { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .proj-bd { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
   }
 </style>

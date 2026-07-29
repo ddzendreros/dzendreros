@@ -24,7 +24,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
-    <meta name="theme-color" content="#07080c" />
+    <meta name="theme-color" content="#07080d" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -33,15 +33,15 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- Fuentes -->
+    <!-- Tipografía Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Idioma: fijar antes del primer paint para evitar parpadeo -->
+    <!-- Fijar idioma antes del primer renderizado para evitar parpadeo -->
     <script is:inline>
       (function () {
         try {
@@ -56,9 +56,6 @@ const ogImage = `${base}images/diego-portrait.jpg`;
     </script>
   </head>
   <body>
-    <!-- Aurora de fondo: luces verde · azul · morado -->
-    <div class="aurora" aria-hidden="true"></div>
-
     <!-- Riel de progreso: el recorrido como pipeline de inferencia -->
     <div class="scroll-rail" aria-hidden="true">
       <span class="scroll-rail__label">inference&nbsp;·&nbsp;scroll</span>
@@ -68,7 +65,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
 
     <slot />
 
-    <!-- ── Paleta dinámica: el acento global muta según la sección visible ── -->
+    <!-- ── Paleta dinámica: acento muta según sección visible ── -->
     <script is:inline>
       (function () {
         const root = document.documentElement;
@@ -85,14 +82,13 @@ const ogImage = `${base}images/diego-portrait.jpg`;
         }
         function apply(el) {
           const p = readPalette(el);
-          root.style.setProperty("--page-glow", p.glow);
-          root.style.setProperty("--page-accent", p.accent);
+          if (p.glow) root.style.setProperty("--page-glow", p.glow);
+          if (p.accent) root.style.setProperty("--page-accent", p.accent);
         }
 
         let current = null;
         const io = new IntersectionObserver(
           (entries) => {
-            // Sección con mayor intersección manda
             let best = null;
             for (const e of entries) {
               if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
@@ -104,14 +100,14 @@ const ogImage = `${base}images/diego-portrait.jpg`;
               apply(current);
             }
           },
-          { threshold: [0.25, 0.5, 0.75], rootMargin: "-35% 0px -35% 0px" }
+          { threshold: [0.2, 0.5, 0.8], rootMargin: "-30% 0px -30% 0px" }
         );
         sections.forEach((s) => io.observe(s));
         apply(sections[0]);
       })();
     </script>
 
-    <!-- ── Reveal al hacer scroll ── -->
+    <!-- ── Revelado al hacer scroll ── -->
     <script is:inline>
       (function () {
         const els = document.querySelectorAll(".reveal");
@@ -128,25 +124,25 @@ const ogImage = `${base}images/diego-portrait.jpg`;
               }
             });
           },
-          { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+          { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
         );
         els.forEach((e) => io.observe(e));
       })();
     </script>
 
-    <!-- ── Micro-interacciones: decode, count-up, spotlight, magnético, riel ── -->
+    <!-- ── Micro-interacciones & Riel de progreso ── -->
     <script is:inline>
       (function () {
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        /* 1 · Decode de tokens en el titular (efecto LLM generando) */
+        /* Decode de tokens en el titular */
         function decode(el) {
           const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/{}[]=+*";
           const lines = el.innerHTML.split(/<br\s*\/?>/i).map((s) => s);
           const plain = lines.map((l) => l.replace(/&amp;/g, "&"));
           const total = plain.reduce((a, l) => a + l.length, 0);
           let revealed = 0;
-          const speed = Math.max(1, Math.round(total / 38));
+          const speed = Math.max(1, Math.round(total / 36));
           function frame() {
             revealed += speed;
             let count = 0;
@@ -157,7 +153,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
                   count++;
                   if (ch === " ") return " ";
                   if (count <= revealed) return ch;
-                  if (count <= revealed + 8)
+                  if (count <= revealed + 6)
                     return `<span class="dec-glitch">${glyphs[(Math.random() * glyphs.length) | 0]}</span>`;
                   return `<span class="dec-hidden">${ch}</span>`;
                 })
@@ -180,10 +176,10 @@ const ogImage = `${base}images/diego-portrait.jpg`;
             setTimeout(() => decode(target), delay);
           });
         }
-        decodeHeadlines(350);
+        decodeHeadlines(300);
         document.addEventListener("langchange", () => decodeHeadlines(60));
 
-        /* 2 · Count-up de métricas al entrar en viewport */
+        /* Count-up de métricas */
         function countUp(el) {
           const raw = el.textContent.trim();
           const m = raw.match(/^(\d+)(.*)$/);
@@ -191,7 +187,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
           const end = parseInt(m[1], 10);
           const suffix = m[2] || "";
           if (reduce) { el.textContent = raw; return; }
-          const dur = 1400;
+          const dur = 1200;
           const start = performance.now();
           function tick(now) {
             const p = Math.min(1, (now - start) / dur);
@@ -208,11 +204,11 @@ const ogImage = `${base}images/diego-portrait.jpg`;
             entries.forEach((e) => {
               if (e.isIntersecting) { countUp(e.target); obs.unobserve(e.target); }
             });
-          }, { threshold: 0.6 });
+          }, { threshold: 0.5 });
           metrics.forEach((m) => mo.observe(m));
         }
 
-        /* 3 · Spotlight de cursor: actualiza --mx/--my en la tarjeta */
+        /* Spotlight en tarjeta */
         document.addEventListener("pointermove", (e) => {
           const card = e.target.closest && e.target.closest(".card");
           if (!card) return;
@@ -221,20 +217,7 @@ const ogImage = `${base}images/diego-portrait.jpg`;
           card.style.setProperty("--my", (e.clientY - r.top) + "px");
         }, { passive: true });
 
-        /* 4 · Botón magnético (CTA primario) */
-        if (!reduce && window.matchMedia("(pointer:fine)").matches) {
-          document.querySelectorAll(".btn-primary").forEach((btn) => {
-            btn.addEventListener("pointermove", (e) => {
-              const r = btn.getBoundingClientRect();
-              const mx = e.clientX - r.left - r.width / 2;
-              const my = e.clientY - r.top - r.height / 2;
-              btn.style.transform = `translate(${mx * 0.22}px, ${my * 0.3}px)`;
-            });
-            btn.addEventListener("pointerleave", () => { btn.style.transform = ""; });
-          });
-        }
-
-        /* 5 · Riel de progreso de scroll */
+        /* Riel de progreso de scroll */
         const rail = document.querySelector(".scroll-rail");
         if (rail) {
           let ticking = false;

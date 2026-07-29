@@ -15,7 +15,7 @@ import T from "./T.astro";
       <!-- Línea de Tiempo de Experiencia -->
       <div class="exp-timeline">
         {experience.map((job, i) => (
-          <article class="job reveal" data-delay={i}>
+          <article class="job reveal" data-delay={i + 1}>
             <div class="job-rail" aria-hidden="true">
               <span class="job-dot"></span>
             </div>
@@ -69,79 +69,67 @@ import T from "./T.astro";
 </section>
 
 <style>
-  .exp-head { margin-bottom: 3.2rem; }
-  .exp-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+  .exp-head { margin-bottom: var(--space-12); }
+  .exp-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-12); }
 
-  /* Carril de línea de tiempo con relieve negativo */
-  .exp-timeline { display: grid; gap: 2.4rem; }
-  .job { display: grid; grid-template-columns: auto 1fr; gap: 1.4rem; }
+  .exp-timeline { display: grid; gap: var(--space-8); }
+  .job { display: grid; grid-template-columns: auto 1fr; gap: var(--space-4); }
   
-  .job-rail { position: relative; width: 20px; display: flex; justify-content: center; }
+  .job-rail { position: relative; width: 16px; display: flex; justify-content: center; }
   .job-rail::before { 
     content: ""; 
     position: absolute; 
     top: 6px; 
-    bottom: -2.6rem; 
-    width: 6px; 
-    background: var(--bg-soft); 
-    box-shadow: var(--nm-shadow-inset-sm); 
-    border-radius: 99px;
+    bottom: -2.4rem; 
+    width: 2px; 
+    background: var(--border-medium); 
   }
   .job:last-child .job-rail::before { display: none; }
   
   .job-dot { 
-    width: 14px; 
-    height: 14px; 
-    border-radius: 99px; 
-    background: var(--bg); 
-    box-shadow: var(--nm-shadow-outset-sm);
-    border: 1px solid rgba(255,255,255,0.015);
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    background: var(--accent); 
+    box-shadow: 0 0 8px rgba(var(--glow), 0.6);
     margin-top: 6px; 
     z-index: 2;
-    position: relative;
-    transition: all 0.3s ease;
-  }
-  .job:hover .job-dot {
-    background: var(--accent);
-    box-shadow: 0 0 10px rgba(var(--glow), 0.6), var(--nm-shadow-outset-sm);
   }
 
   .job-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1rem; justify-content: space-between; }
-  .job-role { font-size: 1.25rem; font-weight: 500; }
-  .job-period { font-size: 0.74rem; color: var(--accent-2); }
-  .job-company { color: var(--text-soft); margin-top: 0.35rem; font-size: 0.94rem; }
-  .job-loc { color: var(--text-dim); }
-  .job-bullets { list-style: none; display: grid; gap: 0.75rem; margin-top: 1rem; }
-  .job-bullets li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-soft); font-size: 0.95rem; }
+  .job-role { font-size: var(--text-lg); font-weight: 500; }
+  .job-period { font-size: var(--text-xs); color: var(--accent-2); }
+  .job-company { color: var(--text-secondary); margin-top: 0.25rem; font-size: var(--text-sm); }
+  .job-loc { color: var(--text-muted); }
+  .job-bullets { list-style: none; display: grid; gap: var(--space-3); margin-top: var(--space-4); }
+  .job-bullets li { display: grid; grid-template-columns: auto 1fr; gap: 0.7rem; color: var(--text-secondary); font-size: var(--text-base); }
   .hl-mark { color: var(--accent); font-size: 0.7rem; line-height: 1.7; }
 
-  .exp-side { display: grid; gap: 2.2rem; align-content: start; }
-  .side-block {
-    padding: clamp(1.4rem, 1rem + 1.4vw, 2.2rem);
-  }
-  .proj-label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1.2rem; }
+  .exp-side { display: grid; gap: var(--space-6); align-content: start; }
+  .side-block { padding: clamp(1.4rem, 1rem + 1.4vw, 2.2rem); }
+  .proj-label { display: block; font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-4); }
   
-  .edu-list { list-style: none; display: grid; gap: 1.4rem; }
+  .edu-list { list-style: none; display: grid; gap: var(--space-4); }
   .edu-item { 
     display: grid; 
-    gap: 0.25rem; 
-    padding-bottom: 1.2rem;
-    border-bottom: 1px dashed var(--border);
+    gap: 0.2rem; 
+    padding-bottom: var(--space-4);
+    border-bottom: 1px dashed var(--border-subtle);
   }
   .edu-item:last-child {
     border-bottom: none;
     padding-bottom: 0;
   }
-  .edu-list strong { font-weight: 500; font-size: 0.98rem; }
-  .edu-school { color: var(--text-soft); font-size: 0.88rem; }
-  .edu-period { color: var(--text-dim); font-size: 0.72rem; }
+  .edu-list strong { font-weight: 500; font-size: var(--text-base); }
+  .edu-school { color: var(--text-secondary); font-size: var(--text-sm); }
+  .edu-period { color: var(--text-muted); font-size: var(--text-xs); }
 
-  .skills { display: grid; gap: 1.4rem; }
-  .skill-group { display: grid; gap: 0.6rem; }
-  .skill-name { font-size: 0.72rem; color: var(--text-soft); letter-spacing: 0.04em; }
-  .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .skills { display: grid; gap: var(--space-4); }
+  .skill-group { display: grid; gap: 0.5rem; }
+  .skill-name { font-size: var(--text-xs); color: var(--text-secondary); letter-spacing: 0.04em; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
   @media (min-width: 940px) {
-    .exp-grid { grid-template-columns: 1.35fr 0.95fr; gap: 4.5rem; }
+    .exp-grid { grid-template-columns: 1.35fr 0.95fr; gap: var(--space-12); }
   }
 </style>

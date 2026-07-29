@@ -1,0 +1,109 @@
+/* ════════════════════════════════════════════════════════════════════════
+   MOTION SYSTEM · Obsidian Editorial Engineering
+   Jerarquía de Animación (Nivel 1 Narrativo, Nivel 2 Micro, Nivel 3 Ambiente)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Nivel 1 & Revelados de Scroll ──────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(4px);
+  transition: opacity var(--dur-entrance) var(--ease-editorial),
+              transform var(--dur-entrance) var(--ease-editorial),
+              filter var(--dur-entrance) var(--ease-editorial);
+  will-change: opacity, transform, filter;
+}
+
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.reveal[data-delay="1"] { transition-delay: 0.08s; }
+.reveal[data-delay="2"] { transition-delay: 0.16s; }
+.reveal[data-delay="3"] { transition-delay: 0.24s; }
+.reveal[data-delay="4"] { transition-delay: 0.32s; }
+
+/* ── Nivel 3: Ambient Glow & Scroll Rail (Pipeline de Inferencia) ────────── */
+.scroll-rail {
+  position: fixed;
+  left: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 36vh;
+  width: 2px;
+  z-index: 40;
+  display: none;
+  background: var(--bg-surface-recessed);
+  border-radius: var(--radius-full);
+}
+
+.scroll-rail__fill {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: calc(var(--p, 0) * 100%);
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 10px rgba(var(--page-glow), 0.4);
+  transition: background var(--dur-slow) ease;
+}
+
+.scroll-rail__head {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--p, 0) * 100%);
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(var(--page-glow), 0.8);
+}
+
+.scroll-rail__label {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+@media (min-width: 1200px) {
+  .scroll-rail { display: block; }
+}
+
+/* ── Micro-animación de respiración / pulso de datos ───────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 2px rgba(var(--glow), 0.3)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px rgba(var(--glow), 0.7)); }
+}
+
+.pulse-indicator {
+  animation: pulse-glow 2.2s infinite ease-in-out;
+}
+
+/* Decode de tokens */
+.dec-hidden { opacity: 0; }
+.dec-glitch { color: var(--accent-2); opacity: 0.7; }
+
+/* ── Desactivación por accesibilidad (prefers-reduced-motion) ────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+  .scroll-rail {
+    display: none !important;
+  }
+  .pulse-indicator {
+    animation: none !important;
+  }
+}

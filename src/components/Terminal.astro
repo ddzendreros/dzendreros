@@ -2,18 +2,18 @@
 import T from "./T.astro";
 ---
 
-<div class="terminal card">
+<div class="terminal card" id="hero-terminal">
   <!-- Cabecera de la Ventana -->
   <div class="terminal-header">
-    <div class="window-controls">
+    <div class="window-controls" aria-hidden="true">
       <span class="control close"></span>
       <span class="control minimize"></span>
       <span class="control maximize"></span>
     </div>
-    <div class="terminal-title">diego@escom-terminal:~</div>
+    <div class="terminal-title font-mono">diego@escom-terminal:~</div>
     <div class="terminal-actions">
-      <button id="terminal-run-btn" class="run-btn" title="Ejecutar Script / Run Script">
-        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <button id="terminal-run-btn" class="run-btn" type="button" title="Ejecutar Script / Run Script" aria-label="Ejecutar script en terminal">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polygon points="5 3 19 12 5 21 5 3"></polygon>
         </svg>
         <span class="font-mono">RUN</span>
@@ -22,25 +22,25 @@ import T from "./T.astro";
   </div>
 
   <!-- Pestañas de Archivos -->
-  <div class="terminal-tabs">
-    <button class="tab-item active" data-tab="argos">
-      <span class="tab-icon">🐍</span>
+  <div class="terminal-tabs" role="tablist" aria-label="Pestañas de la consola">
+    <button class="tab-item active" type="button" role="tab" aria-selected="true" aria-controls="content-argos" id="tab-argos" data-tab="argos">
+      <span class="tab-icon" aria-hidden="true">🐍</span>
       <span class="font-mono">argos.py</span>
     </button>
-    <button class="tab-item" data-tab="aeterna">
-      <span class="tab-icon">🐍</span>
+    <button class="tab-item" type="button" role="tab" aria-selected="false" aria-controls="content-aeterna" id="tab-aeterna" data-tab="aeterna">
+      <span class="tab-icon" aria-hidden="true">🐍</span>
       <span class="font-mono">aeterna.py</span>
     </button>
-    <button class="tab-item" data-tab="skills">
-      <span class="tab-icon">🐚</span>
+    <button class="tab-item" type="button" role="tab" aria-selected="false" aria-controls="content-skills" id="tab-skills" data-tab="skills">
+      <span class="tab-icon" aria-hidden="true">🐚</span>
       <span class="font-mono">skills.sh</span>
     </button>
   </div>
 
   <!-- Pantalla de la Consola -->
-  <div class="terminal-body nm-recessed">
+  <div class="terminal-body recessed-panel">
     <!-- Tab: Argos -->
-    <div class="terminal-content active" id="content-argos">
+    <div class="terminal-content active" id="content-argos" role="tabpanel" aria-labelledby="tab-argos">
       <div class="terminal-line command">
         <span class="prompt">$</span><span class="typed-command" data-cmd="python -m argos --query 'autonomous reasoning' --local"></span><span class="cursor">_</span>
       </div>
@@ -48,7 +48,7 @@ import T from "./T.astro";
     </div>
 
     <!-- Tab: Aeterna -->
-    <div class="terminal-content" id="content-aeterna">
+    <div class="terminal-content" id="content-aeterna" role="tabpanel" aria-labelledby="tab-aeterna">
       <div class="terminal-line command">
         <span class="prompt">$</span><span class="typed-command" data-cmd="python -m aeterna --vigil --active-learning"></span><span class="cursor">_</span>
       </div>
@@ -56,7 +56,7 @@ import T from "./T.astro";
     </div>
 
     <!-- Tab: Skills -->
-    <div class="terminal-content" id="content-skills">
+    <div class="terminal-content" id="content-skills" role="tabpanel" aria-labelledby="tab-skills">
       <div class="terminal-line command">
         <span class="prompt">$</span><span class="typed-command" data-cmd="./skills.sh --list --level=expert"></span><span class="cursor">_</span>
       </div>
@@ -67,7 +67,6 @@ import T from "./T.astro";
 
 <script is:inline>
   (function () {
-    // Definimos los logs para cada simulación
     const argosLogs = [
       { t: "⚡ [LANGGRAPH] Orquestando grafo de estados...", c: "info" },
       { t: "🔍 [STATE: classifier] -> Intención detectada: Académica / Científica", c: "accent" },
@@ -104,61 +103,67 @@ import T from "./T.astro";
       { t: "🟢 Ready for deployment.", c: "success" }
     ];
 
-    const logData = {
-      argos: argosLogs,
-      aeterna: aeternaLogs,
-      skills: skillsLogs
-    };
-
+    const logData = { argos: argosLogs, aeterna: aeternaLogs, skills: skillsLogs };
     let activeTab = "argos";
     let isRunning = false;
     let timeouts = [];
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const runBtn = document.getElementById("terminal-run-btn");
     const tabs = document.querySelectorAll(".tab-item");
     const contents = document.querySelectorAll(".terminal-content");
 
-    // Limpia y resetea las animaciones en curso
-    function resetTerminal() {
-      timeouts.forEach(t => clearTimeout(t));
+    function clearPendingTimeouts() {
+      timeouts.forEach((t) => clearTimeout(t));
       timeouts = [];
-      isRunning = false;
-      runBtn.classList.remove("disabled");
-
-      // Resetear textos typed-command y logs
-      document.querySelectorAll(".typed-command").forEach(el => {
-        el.textContent = "";
-      });
-      document.querySelectorAll(".terminal-logs").forEach(el => {
-        el.innerHTML = "";
-      });
-      document.querySelectorAll(".cursor").forEach(el => {
-        el.style.display = "inline";
-      });
     }
 
-    // Animación de escritura
+    function resetTerminal() {
+      clearPendingTimeouts();
+      isRunning = false;
+      if (runBtn) runBtn.classList.remove("disabled");
+
+      document.querySelectorAll(".typed-command").forEach((el) => { el.textContent = ""; });
+      document.querySelectorAll(".terminal-logs").forEach((el) => { el.innerHTML = ""; });
+      document.querySelectorAll(".cursor").forEach((el) => { el.style.display = "inline"; });
+    }
+
     function typeCommand(element, text, callback) {
+      if (reduce) {
+        element.textContent = text;
+        if (callback) callback();
+        return;
+      }
       let index = 0;
       element.textContent = "";
       function type() {
         if (index < text.length) {
           element.textContent += text[index];
           index++;
-          const t = setTimeout(type, 35 + Math.random() * 30);
+          const t = setTimeout(type, 30 + Math.random() * 20);
           timeouts.push(t);
-        } else {
-          if (callback) callback();
+        } else if (callback) {
+          callback();
         }
       }
       type();
     }
 
-    // Simula la impresión progresiva de logs
     function printLogs(logContainer, logs, cursorEl) {
-      cursorEl.style.display = "none"; // Ocultar cursor al iniciar logs
-      let logIndex = 0;
+      cursorEl.style.display = "none";
+      if (reduce) {
+        logs.forEach((log) => {
+          const line = document.createElement("div");
+          line.className = `terminal-line log-line color-${log.c}`;
+          line.textContent = log.t;
+          logContainer.appendChild(line);
+        });
+        isRunning = false;
+        if (runBtn) runBtn.classList.remove("disabled");
+        return;
+      }
 
+      let logIndex = 0;
       function printNextLine() {
         if (logIndex < logs.length) {
           const log = logs[logIndex];
@@ -167,43 +172,40 @@ import T from "./T.astro";
           line.textContent = log.t;
           logContainer.appendChild(line);
 
-          // Auto scroll
           const body = logContainer.closest(".terminal-body");
-          body.scrollTop = body.scrollHeight;
+          if (body) body.scrollTop = body.scrollHeight;
 
           logIndex++;
-          const t = setTimeout(printNextLine, 120 + Math.random() * 150);
+          const t = setTimeout(printNextLine, 100 + Math.random() * 100);
           timeouts.push(t);
         } else {
           isRunning = false;
-          runBtn.classList.remove("disabled");
-          // Añadir prompt final inactivo
+          if (runBtn) runBtn.classList.remove("disabled");
           const finalPrompt = document.createElement("div");
           finalPrompt.className = "terminal-line command";
           finalPrompt.innerHTML = '<span class="prompt">$</span><span class="cursor pulse-indicator">_</span>';
           logContainer.appendChild(finalPrompt);
 
           const body = logContainer.closest(".terminal-body");
-          body.scrollTop = body.scrollHeight;
+          if (body) body.scrollTop = body.scrollHeight;
         }
       }
-      const t = setTimeout(printNextLine, 300);
+      const t = setTimeout(printNextLine, 200);
       timeouts.push(t);
     }
 
-    // Orquesta la ejecución del script de la pestaña activa
     function runActiveScript() {
       if (isRunning) return;
       isRunning = true;
-      runBtn.classList.add("disabled");
+      if (runBtn) runBtn.classList.add("disabled");
 
       const activeContent = document.querySelector(`.terminal-content.active`);
+      if (!activeContent) return;
       const typedEl = activeContent.querySelector(".typed-command");
       const cursorEl = activeContent.querySelector(".cursor");
       const logsEl = activeContent.querySelector(".terminal-logs");
       const cmdText = typedEl.getAttribute("data-cmd");
 
-      // Resetear la pestaña actual antes de escribir
       typedEl.textContent = "";
       logsEl.innerHTML = "";
       cursorEl.style.display = "inline";
@@ -213,49 +215,50 @@ import T from "./T.astro";
       });
     }
 
-    // Cambiar entre pestañas
-    tabs.forEach(tab => {
+    tabs.forEach((tab) => {
       tab.addEventListener("click", function () {
-        if (isRunning) return; // Bloquear cambio si se está ejecutando
-
+        if (isRunning) return;
         const targetTab = this.getAttribute("data-tab");
         if (targetTab === activeTab) return;
 
-        // Quitar clases activas
-        tabs.forEach(t => t.classList.remove("active"));
-        contents.forEach(c => c.classList.remove("active"));
+        tabs.forEach((t) => {
+          t.classList.remove("active");
+          t.setAttribute("aria-selected", "false");
+        });
+        contents.forEach((c) => c.classList.remove("active"));
 
-        // Activar pestaña seleccionada
         this.classList.add("active");
-        document.getElementById(`content-${targetTab}`).classList.add("active");
+        this.setAttribute("aria-selected", "true");
+        const activePanel = document.getElementById(`content-${targetTab}`);
+        if (activePanel) activePanel.classList.add("active");
 
         activeTab = targetTab;
         resetTerminal();
-        // Auto-run al cambiar de pestaña para mejorar el feedback visual inicial
         runActiveScript();
       });
     });
 
-    runBtn.addEventListener("click", function () {
-      if (isRunning) return;
-      resetTerminal();
-      runActiveScript();
-    });
+    if (runBtn) {
+      runBtn.addEventListener("click", function () {
+        if (isRunning) return;
+        resetTerminal();
+        runActiveScript();
+      });
+    }
 
-    // Iniciar el script Argos la primera vez que carga la pantalla
-    document.addEventListener("DOMContentLoaded", () => {
-      // Usar un IntersectionObserver para disparar el script cuando sea visible el Hero
-      const terminalEl = document.querySelector(".terminal");
+    /* Trigger por IntersectionObserver */
+    const terminalEl = document.getElementById("hero-terminal");
+    if (terminalEl) {
       const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
+        entries.forEach((e) => {
           if (e.isIntersecting) {
             runActiveScript();
             observer.unobserve(terminalEl);
           }
         });
-      }, { threshold: 0.2 });
+      }, { threshold: 0.15 });
       observer.observe(terminalEl);
-    });
+    }
   })();
 </script>
 
@@ -264,21 +267,20 @@ import T from "./T.astro";
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 580px;
     height: 380px;
-    background: var(--bg);
-    border-radius: 1.1rem;
+    background: var(--bg-surface-base);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    z-index: 10;
   }
 
   .terminal-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 1rem;
-    background: var(--bg-soft);
-    border-bottom: 1px solid var(--border);
+    padding: 0.65rem 1rem;
+    background: var(--bg-surface-elevated);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .window-controls {
@@ -288,7 +290,7 @@ import T from "./T.astro";
   .control {
     width: 10px;
     height: 10px;
-    border-radius: 99px;
+    border-radius: 50%;
     display: inline-block;
   }
   .control.close { background: #ff5f56; }
@@ -296,9 +298,8 @@ import T from "./T.astro";
   .control.maximize { background: #27c93f; }
 
   .terminal-title {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--text-dim);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
     letter-spacing: 0.02em;
     user-select: none;
   }
@@ -308,33 +309,27 @@ import T from "./T.astro";
     align-items: center;
     gap: 0.35rem;
     padding: 0.25rem 0.6rem;
-    border-radius: 6px;
-    background: var(--bg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+    background: var(--bg-obsidian);
+    border: 1px solid var(--border-subtle);
     color: var(--accent-2);
-    box-shadow: var(--nm-shadow-outset-sm);
+    font-size: var(--text-xs);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all var(--dur-fast) ease;
   }
   .run-btn:hover:not(.disabled) {
-    color: #27c93f;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.4), -2px -2px 6px rgba(255,255,255,0.02);
-    transform: translateY(-0.5px);
-  }
-  .run-btn:active:not(.disabled) {
-    box-shadow: var(--nm-shadow-inset-sm);
-    transform: translateY(0.5px);
+    color: #4ade80;
+    border-color: var(--border-medium);
   }
   .run-btn.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    box-shadow: none;
   }
 
   .terminal-tabs {
     display: flex;
-    background: var(--bg-soft);
-    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface-elevated);
+    border-bottom: 1px solid var(--border-subtle);
     padding-inline: 0.5rem;
     gap: 2px;
   }
@@ -342,88 +337,68 @@ import T from "./T.astro";
   .tab-item {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-    padding: 0.5rem 0.9rem;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
     border: none;
     background: transparent;
-    color: var(--text-dim);
-    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-size: var(--text-xs);
     cursor: pointer;
-    position: relative;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    transition: all 0.25s ease;
+    border-top-left-radius: var(--radius-sm);
+    border-top-right-radius: var(--radius-sm);
+    transition: color var(--dur-fast) ease, background var(--dur-fast) ease;
   }
   .tab-item:hover {
-    color: var(--text-soft);
-    background: rgba(255, 255, 255, 0.01);
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
   }
   .tab-item.active {
     color: var(--accent-2);
-    background: var(--bg);
-    border-top: 1px solid rgba(var(--glow), 0.3);
+    background: var(--bg-surface-base);
+    border-top: 2px solid var(--accent-2);
   }
 
   .terminal-body {
     flex: 1;
-    margin: 0.8rem;
-    padding: 0.9rem;
-    border-radius: 0.6rem;
+    margin: 0.75rem;
+    padding: 0.85rem;
     font-family: var(--font-mono);
     font-size: 0.76rem;
-    line-height: 1.5;
+    line-height: 1.55;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    background: #090a11 !important; /* Panel interno negro profundo */
+    gap: 0.35rem;
+    background: #06070b !important;
   }
 
-  .terminal-content {
-    display: none;
-  }
-  .terminal-content.active {
-    display: block;
-  }
+  .terminal-content { display: none; }
+  .terminal-content.active { display: block; }
 
   .terminal-line {
     white-space: pre-wrap;
     word-break: break-all;
-    margin-bottom: 0.25rem;
-  }
-  .terminal-line.command {
-    color: var(--text);
+    margin-bottom: 0.2rem;
   }
   .prompt {
     color: var(--accent);
     margin-right: 0.5rem;
     font-weight: bold;
-    user-select: none;
   }
   .cursor {
     font-weight: bold;
     color: var(--accent-2);
   }
 
-  /* Colores de Logs ANSI */
-  .color-info { color: #81a1c1; }
+  .color-info { color: #93c5fd; }
   .color-accent { color: var(--accent-2); }
-  .color-success { color: #a3be8c; }
-  .color-warning { color: #ebcb8b; }
-  .color-dim { color: var(--text-dim); }
+  .color-success { color: #86efac; }
+  .color-warning { color: #fde047; }
+  .color-dim { color: var(--text-muted); }
 
-  /* Ajuste responsivo */
   @media (max-width: 480px) {
-    .terminal {
-      height: 340px;
-    }
-    .terminal-body {
-      font-size: 0.72rem;
-      margin: 0.5rem;
-      padding: 0.6rem;
-    }
-    .tab-item {
-      padding: 0.4rem 0.6rem;
-    }
+    .terminal { height: 350px; }
+    .terminal-body { font-size: 0.72rem; margin: 0.5rem; padding: 0.6rem; }
+    .tab-item { padding: 0.35rem 0.55rem; }
   }
 </style>

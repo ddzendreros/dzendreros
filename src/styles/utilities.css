@@ -1,0 +1,28 @@
+/* ════════════════════════════════════════════════════════════════════════
+   UTILITIES & ACCESSIBILITY HELPER CLASSES
+   Obsidian Editorial Engineering
+   ════════════════════════════════════════════════════════════════════════ */
+
+.font-display { font-family: var(--font-display); }
+.font-sans    { font-family: var(--font-sans); }
+.font-mono    { font-family: var(--font-mono); }
+
+.text-balance { text-wrap: balance; }
+.text-pretty  { text-wrap: pretty; }
+
+/* Visibilidad de idioma para SSR / hydration */
+html[data-lang="es"] :where([data-lang-en]) { display: none !important; }
+html[data-lang="en"] :where([data-lang-es]) { display: none !important; }
+
+/* Accesibilidad lectores de pantalla */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

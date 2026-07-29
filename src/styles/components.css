@@ -1,0 +1,141 @@
+/* ════════════════════════════════════════════════════════════════════════
+   COMPONENTS · Obsidian Editorial Engineering
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Tarjetas Editoriales Sobrias ───────────────────────────────────────── */
+.card {
+  position: relative;
+  background: var(--bg-surface-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  transition: transform var(--dur-base) var(--ease-editorial),
+              border-color var(--dur-base) var(--ease-editorial),
+              box-shadow var(--dur-base) var(--ease-editorial);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(var(--page-glow), 0.06);
+}
+
+/* Spotlight sutil que sigue el cursor */
+.card { --mx: 50%; --my: 50%; }
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    18rem 18rem at var(--mx) var(--my),
+    rgba(var(--page-glow), 0.08),
+    transparent 70%
+  );
+  transition: opacity var(--dur-base) ease;
+  z-index: 1;
+}
+.card:hover::after { opacity: 1; }
+.card > * { position: relative; z-index: 2; }
+
+/* ── Paneles Recesivos (Pistas de Datos / Código) ───────────────────────── */
+.recessed-panel,
+.nm-recessed {
+  position: relative;
+  background: var(--bg-surface-recessed);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+}
+
+/* ── Badges / Chips ─────────────────────────────────────────────────────── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.chip:hover {
+  border-color: var(--border-medium);
+  color: var(--text-primary);
+}
+
+/* ── Jerarquía de Botones ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-md);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 44px; /* Touch target accesibilidad */
+  transition: transform var(--dur-fast) var(--ease-editorial),
+              background var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              box-shadow var(--dur-fast) ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  color: var(--accent-ink);
+  font-weight: 600;
+  border-color: transparent;
+  box-shadow: 0 4px 16px rgba(var(--glow), 0.25);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(var(--glow), 0.35);
+  background: linear-gradient(135deg, #ffffff, var(--accent-2));
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent-2);
+  color: var(--text-primary);
+  background: rgba(var(--glow), 0.06);
+}
+
+/* Indicadores Métricos */
+.metric {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+}

@@ -1,0 +1,75 @@
+/* ════════════════════════════════════════════════════════════════════════
+   LAYOUT ENGINE & EDITORIAL SPACING
+   Obsidian Editorial Engineering
+   ════════════════════════════════════════════════════════════════════════ */
+
+.shell {
+  width: min(1200px, 90vw);
+  margin-inline: auto;
+}
+
+.shell-wide {
+  width: min(1360px, 94vw);
+  margin-inline: auto;
+}
+
+.shell-narrow {
+  width: min(860px, 88vw);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: var(--section-padding-y);
+  position: relative;
+}
+
+/* Encabezados Editoriales */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  font-weight: 500;
+}
+
+.kicker::before {
+  content: "";
+  width: 1.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-top: var(--space-4);
+  max-width: 22ch;
+}
+
+.section-lead {
+  margin-top: var(--space-4);
+  max-width: 58ch;
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+/* Divisores de Sección Sobrios */
+.divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-medium),
+    transparent
+  );
+  margin-block: var(--space-12);
+}
